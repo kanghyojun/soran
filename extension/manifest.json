@@ -9,6 +9,12 @@
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
+  
+  "background": {
+    "page": "background.html"
+  },
+
+  "permissions": ["http://192.168.0.174:9001/*"],
 
   "content_scripts": [
     {
