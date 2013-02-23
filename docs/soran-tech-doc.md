@@ -2,6 +2,9 @@
 
 
 ## Bugs
+### [player](http://www.bugs.co.kr/swf/BugsNewPlayer.swf?version=201301010350)
+
+`object#BugsPlayer` 엘리먼트에서 플레이중
 
 ### url 
 
