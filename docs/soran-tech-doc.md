@@ -20,6 +20,8 @@ JSON으로 리턴됨.
   
 ## Naver Music
 
+`nhn.FlashObject.find("NMP_web_player_container")`로 `JSFlash` 오브젝트 내부에 `_oStreamingCore` 생성한 후에, 이 변수로 재생, 정지를 관리하는거같다.
+
 ### url
 
  - http://player.music.naver.com/api.nhn?trackid=:traciId&m=songinfo
