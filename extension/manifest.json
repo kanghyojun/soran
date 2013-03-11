@@ -14,7 +14,7 @@
     "page": "background.html"
   },
 
-  "permissions": ["http://192.168.0.174:9001/*"],
+  "permissions": ["http://192.168.0.174:9001/*", "http://192.168.0.174:9000/*"],
 
   "content_scripts": [
     {
