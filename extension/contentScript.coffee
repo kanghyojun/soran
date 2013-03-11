@@ -1,4 +1,12 @@
-__soran = 
+__soran =
+  init: (conn) ->
+    this.conn = conn
+    data =
+      kind: 'bugsUserName'
+      name: $('.username').find('strong').text()
+    this.conn.postMessage data
+    this
+
   getBugsTrackInfo: (trackNum, callback) ->
     that = this
     options =
@@ -19,15 +27,16 @@ __soran =
       genre: genre
       length: length
       releaseDate: releaseDate
-
     data
 
-__soran.chromeConn = chrome.extension.connect()
+__soran.init chrome.extension.connect()
 
-# Bugs configuration
 $('li.listRow').on 'click', (e) ->
   trackNumber = $(this).find('input[name=_isStream]').attr('value')
   __soran.getBugsTrackInfo trackNumber, (track) ->
-    console.log track
+    track.serviceName = 'bugs'
+    track.id = trackNumber
+    track.kind = 'bugsTrack'
     __soran.chromeConn.postMessage track
+    __soran.conn.postMessage
   true

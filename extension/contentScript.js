@@ -3,6 +3,16 @@
   var __soran;
 
   __soran = {
+    init: function(conn) {
+      var data;
+      this.conn = conn;
+      data = {
+        kind: 'bugsUserName',
+        name: $('.username').find('strong').text()
+      };
+      this.conn.postMessage(data);
+      return this;
+    },
     getBugsTrackInfo: function(trackNum, callback) {
       var options, that;
       that = this;
@@ -32,14 +42,17 @@
     }
   };
 
-  __soran.chromeConn = chrome.extension.connect();
+  __soran.init(chrome.extension.connect());
 
-  $('li.listRow').on('mouseover', function(e) {
+  $('li.listRow').on('click', function(e) {
     var trackNumber;
     trackNumber = $(this).find('input[name=_isStream]').attr('value');
     __soran.getBugsTrackInfo(trackNumber, function(track) {
-      console.log(track);
-      return __soran.chromeConn.postMessage(track);
+      track.serviceName = 'bugs';
+      track.id = trackNumber;
+      track.kind = 'bugsTrack';
+      __soran.chromeConn.postMessage(track);
+      return __soran.conn.postMessage;
     });
     return true;
   });
