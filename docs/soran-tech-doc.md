@@ -65,12 +65,18 @@ URI encoded STRING으로 리턴됨.
 
 ### Query Param
 
- - trackId: `tr._tracklist`에 `trackdata`에 맨처음에 저장되어있음. `|`로 split해서 가져오면됨.
- 
-.
-    
-    
+trackId: `tr._tracklist`에 `trackdata`에 맨처음에 저장되어있음`|`로 split해서 가져오면됨  
+
     var a = $($('tr._tracklist')[0]).data('trackdata').split('|')[0]
 
+### How to write our music log in NaverMusic
+
+`oMusicPlayer.oFlash` object가 노래 재생이나, 일시정지하는것을 관리한다.
+
+위 벅스방법대로 함수를 wrapping해도 아무반응이 일어나지않는다.[^2]
+
 [^1]: [여기](./bugs.source.txt)에 벅스 플레이어 swf 디컴파일한 소스가있다.
+
+
+[^2]: `(function() { doSomething() })();` 과 같이 anonymous function안에서 oMusicPlayer를 생성한다. jindo framework 코드로 class를 관리한다. `var foo = jindo.$Class({})` 꼭 `new foo()`와 같이 인스턴스 생성 후에 사용하여야한다. compress.js 참고.
     
