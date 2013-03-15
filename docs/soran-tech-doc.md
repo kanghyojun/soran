@@ -75,6 +75,10 @@ trackId: `tr._tracklist`에 `trackdata`에 맨처음에 저장되어있음`|`로
 
 위 벅스방법대로 함수를 wrapping해도 아무반응이 일어나지않는다.[^2]
 
+flash container에 callback 함수가 `___musicBroadCast___`이며 모든 이벤트가 여기를 통해서 괸리된다.
+
+`argument[0]`이 `nmp_ended`거나 `nmp_play`일때 기록하면될것같다. `argument[1].sTrackId`에서 플레이하는 트랙 아이디를 알수있음. 
+
 [^1]: [여기](./bugs.source.txt)에 벅스 플레이어 swf 디컴파일한 소스가있다.
 
 
