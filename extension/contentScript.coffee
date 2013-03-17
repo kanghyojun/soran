@@ -1,4 +1,10 @@
 __soran =
+  BUGS_PREFIX: 'bugs'
+  NAVER_PREFIX: 'naver-music'
+  servicePrefix: ''
+  user:
+    name: ''
+    identifier: ''
   init: (conn) ->
     this.conn = conn
     data =
