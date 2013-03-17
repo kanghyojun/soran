@@ -6,6 +6,12 @@ __soran =
   user:
     name: ''
     identifier: ''
+  getUserIdentifier: () ->
+    unless this.servicePrefix.length == 0 and this.user.name.length == 0
+      "#{ n }@#{ this.servicePrefix }"
+    else
+      ''
+
   init: (conn) ->
     this.conn = conn
     data =
