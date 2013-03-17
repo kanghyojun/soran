@@ -1,6 +1,7 @@
 __soran =
   BUGS_PREFIX: 'bugs'
-  NAVER_PREFIX: 'naver-music'
+  NAVER_PREFIX: 'naver-music'  
+  EVENT_USER_INIT: 'userInit'
   servicePrefix: ''
   isLogin: false
   user:
