@@ -2,6 +2,7 @@ __soran =
   BUGS_PREFIX: 'bugs'
   NAVER_PREFIX: 'naver-music'
   servicePrefix: ''
+  isLogin: false
   user:
     name: ''
     identifier: ''
