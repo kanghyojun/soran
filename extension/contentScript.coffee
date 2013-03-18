@@ -5,13 +5,12 @@ __soran =
   EVENT_USER_INIT: 'userInit'
   EVENT_LISTEN: 'listen'
   BUGS_TRACK_API_URL: "http://music.bugs.co.kr/player/track/"
+  BUGS_DOMAIN: 'bugs.co.kr'
   ERROR: 'Error'
   servicePrefix: ''
-  isLogin: false
+  isListen: false
+  conn: undefined
   loggedAt: 80
-  user:
-    name: ''
-    identifier: '' 
   nowPlaying:
     id: ''
     len: 0
