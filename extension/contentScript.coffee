@@ -145,3 +145,28 @@ __soran =
       console.log "call ended"
       setTimeout(f, time)
     this
+
+
+runTicking = () ->
+  __soran.tick __soran.BUGS_PREFIX, (e, trackNum) ->
+    switch (e)
+      when __soran.EVENT_LISTEN
+        __soran.getBugsTrackInfo trackNum, (d) ->
+          console.log 'calling, ', d
+          d.kind = __soran.EVENT_LISTEN
+          __soran.conn.postMessage d
+      else
+        console.log 'errored'
+        d =
+          kind: __soran.BUGS_PREFIX + __soran.ERROR
+          msg: 'Unknown error occured in f, contentScript.coffee [line: 146]'
+        __soran.conn.postMessage d
+    true
+  true
+
+main = ->
+  __soran.init chrome.extension.connect() 
+  if $('.progress .bar').length != 0 
+    setTimeout runTicking, 2000
+
+$(document).ready main
