@@ -1,14 +1,16 @@
 __soran =
   BUGS_PREFIX: 'bugs'
-  NAVER_PREFIX: 'naver-music'  
+  NAVER_PREFIX: 'naverMusic'  
+  TRACK_POSTFIX: "Track"
   EVENT_USER_INIT: 'userInit'
   EVENT_LISTEN: 'listen'
+  BUGS_TRACK_API_URL: "http://music.bugs.co.kr/player/track/"
+  ERROR: 'Error'
   servicePrefix: ''
   isLogin: false
   loggedAt: 80
   user:
     name: ''
-    identifier: ''
     identifier: '' 
   nowPlaying:
     id: ''
