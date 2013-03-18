@@ -36,7 +36,7 @@ __soran =
 
   track: (id, artist, albumArtist, albumTitle, title, genre, length, releaseDate) ->
     data =
-      id: id
+      identifier: id
       artist: artist
       albumArtist: albumArtist
       albumTitle: albumTitle
