@@ -14,13 +14,19 @@
     "page": "background.html"
   },
 
-  "permissions": ["cookies", "http://192.168.0.174:9001/*", "http://192.168.0.174:9000/*"],
+  "permissions": [
+    "cookies",
+    "http://bugs.co.kr/*",
+    "http://192.168.0.174:9001/*", "http://192.168.0.174:9000/*"
+  ],
 
   "content_scripts": [
     {
       "matches": [
         "http://music.naver.com/*",
-        "http://music.bugs.co.kr/*"
+        "http://music.bugs.co.kr/*",
+        "http://bugs.co.kr/*",
+        "http://*.bugs.co.kr/*"
       ],
       "js": ["jquery.js", "contentScript.js"],
       "run_at": "document_end"
