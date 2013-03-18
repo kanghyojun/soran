@@ -84,4 +84,64 @@ __soran =
       releaseDate: releaseDate
     data
 
-__soran.init chrome.extension.connect()
+  ###
+  일정시간마다 웹플레이어가 노래를 어디까지 틀었나 확인한다. 트랙에 길이 __soran.nowPlaying.len 을 이용해서 다음 호출 시점을 정한다.
+  @param {string} kind 서비스 이름 PREFIX (eg. __soran.BUGS_PREFIX, ...)
+  ###
+  tick: (kind, callback) ->
+    console.log "ticking started, ", kind
+    that = this
+    time = 0
+    f = ->
+      console.log 'applied'
+      that.tick.apply(that, [kind, callback])
+      true
+
+    switch (kind)
+      when this.BUGS_PREFIX
+        nowProgress = $('.progress .bar').attr('style').substr(7, 2)
+        nowPlaying = $('.nowPlaying').find('.trackInfo')
+        nowId = nowPlaying.attr('id')
+        [min, sec] = nowPlaying.attr('duration').split(":")
+        this.nowPlaying.id = nowId
+        min = parseInt min
+        sec = parseInt sec
+        this.nowPlaying.len = (sec + (min * 60)) * 1000
+        console.log '1 >', time
+        if nowPlaying.length is 0 
+          console.log 'here, '
+          setTimeout f, 1000
+          return false
+
+        if this.isListen 
+          this.isListen = false
+
+        console.log 'style, ', $('.progress .bar').attr('style')
+        console.log 'nowProgress, ', nowProgress
+        if nowProgress.search('%') == 1 or nowProgress.search('p') == 1
+          time = this.nowPlaying.len * 0.7
+          console.log '2 >', time
+        else
+          nowProgressInt = parseInt(nowProgress)
+          time = this.nowPlaying.len * 0.05
+          console.log this.nowPlaying.len
+          if not this.isListen and this.loggedAt <= nowProgressInt 
+            this.isListen = true
+            remainPercentage = (100 - nowProgressInt) / 100
+            remainTime = this.nowPlaying.len * (remainPercentage + 0.05)
+            console.log remainPercentage
+            console.log 'remainTime >', remainTime
+            time = remainTime
+            callback this.EVENT_LISTEN, this.nowPlaying.id
+          console.log '3 >', time
+      else
+        this.isListen = false
+        time = 100000
+        return false
+
+    console.log '4 >', time
+    if time isnt 0
+      console.log 'hey time', time
+      console.log "call ended"
+      setTimeout(f, time)
+    this
