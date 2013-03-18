@@ -2,11 +2,18 @@ __soran =
   BUGS_PREFIX: 'bugs'
   NAVER_PREFIX: 'naver-music'  
   EVENT_USER_INIT: 'userInit'
+  EVENT_LISTEN: 'listen'
   servicePrefix: ''
   isLogin: false
+  loggedAt: 80
   user:
     name: ''
     identifier: ''
+    identifier: '' 
+  nowPlaying:
+    id: ''
+    len: 0
+
   getUserIdentifier: () ->
     unless this.servicePrefix.length == 0 and this.user.name.length == 0
       "#{ n }@#{ this.servicePrefix }"
