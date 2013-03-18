@@ -25,8 +25,9 @@ __soran =
   init: (conn) ->
     this.conn = conn 
 
-  track: (artist, albumArtist, albumTitle, title, genre, length, releaseDate) ->
+  track: (id, artist, albumArtist, albumTitle, title, genre, length, releaseDate) ->
     data =
+      id: id
       artist: artist
       albumArtist: albumArtist
       albumTitle: albumTitle
