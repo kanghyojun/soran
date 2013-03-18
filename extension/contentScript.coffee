@@ -22,7 +22,17 @@ __soran =
       ''
 
   init: (conn) ->
-    this.conn = conn 
+    this.conn = conn
+    that = this
+
+    $(document).on 'click', () ->
+      bugsUserNameCover = $('.username strong')
+      if document.domain is that.BUGS_DOMAIN and bugsUserNameCover.length isnt 0
+        that.servicePrefix = that.BUGS_PREFIX
+        d =
+          kind: that.EVENT_USER_INIT
+          identifier: that.getUserIdentifier bugsUserNameCover.text()
+        that.conn.postMessage d
 
   track: (id, artist, albumArtist, albumTitle, title, genre, length, releaseDate) ->
     data =
