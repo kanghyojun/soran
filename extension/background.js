@@ -5,40 +5,72 @@
   mintpressoAPIKey = '48d54bf7e4fa5e7abb6a2f4ecf8b096e::1';
 
   _soran = {
+    BUGS_PREFIX: 'bugs',
+    NAVER_PREFIX: 'naverMusic',
+    TRACK_POSTFIX: "Track",
+    EVENT_USER_INIT: 'userInit',
+    EVENT_LISTEN: 'listen',
+    BUGS_TRACK_API_URL: "http://music.bugs.co.kr/player/track/",
+    SORAN_TYPE_USER: 'user',
+    SORAN_TYPE_MUSIC: 'music',
+    SORAN_TYPE_ARTIST: 'artist',
+    SORAN_VERB_SING: 'sing',
+    SORAN_VERB_LISTEN: 'listen',
+    ERROR: 'Error',
     user: {
-      name: '',
-      mintpresso: ''
+      type: 'user',
+      identifier: ''
     },
-    addUser: function(info) {
+    addUser: function(identifier) {
       var data;
-      if (info.name.length !== 0 && this.user.name !== info.name) {
-        this.user.name = info.name;
+      console.log('Add user, ', identifier);
+      if (identifier.length !== 0 && this.user.identifier !== identifier) {
+        this.user.identifier = identifier;
         data = {
-          type: 'user',
-          identifier: "bugs-" + this.user.name
+          'type': 'user',
+          'identifier': identifier
         };
         return mintpresso.set(data);
       }
     },
-    addMusic: function(info, callback) {
+    addMusic: function(d, callback) {
       var data;
       data = {
-        type: "music",
-        identifier: "" + info.serviceName + "-" + info.id,
-        data: {
-          albumArtist: info.albumArtist,
-          albumTitle: info.albumTitle,
-          artist: info.artist,
-          genre: info.genre,
-          length: info.length,
-          releaseDate: info.releaseDate,
-          title: info.title
+        'type': this.SORAN_TYPE_MUSIC,
+        'identifier': d.identifier,
+        'data': {
+          'albumArtist': d.albumArtist,
+          'albumTitle': d.albumTitle,
+          'artist': d.artist,
+          'genre': d.genre,
+          'length': d.length,
+          'releaseDate': d.releaseDate,
+          'title': d.title
         }
       };
-      return mintpresso.set(data);
+      console.log('Add music, ', data);
+      return mintpresso.set(data, function(dt) {
+        return callback(dt);
+      });
     },
-    listenMusic: function(music) {
-      return true;
+    addArtist: function(d, callback) {
+      var data;
+      data = {
+        'type': this.SORAN_TYPE_ARTIST,
+        'identifier': d.artist
+      };
+      console.log('Add artist, ', data);
+      return mintpresso.set(data, function(d) {
+        return callback(d);
+      });
+    },
+    listen: function(user, music, callback) {
+      console.log('listen, ', user, music);
+      return callback(true);
+    },
+    sing: function(artist, music, callback) {
+      console.log('sing, ', artist, music);
+      return callback(true);
     }
   };
 
@@ -48,14 +80,32 @@
       withoutCallback: true
     });
     tab = port.sender.tab;
-    return port.onMessage.addListener(function(info) {
-      switch (info.kind) {
-        case 'bugsUserName':
-          return _soran.addUser(info);
-        case 'bugsTrack':
-          return _soran.addMusic(info, function(m) {
-            return _soran.listenMusic(m);
-          });
+    console.log("added");
+    return port.onMessage.addListener(function(data) {
+      if (data.kind !== void 0) {
+        if (data.kind === _soran.EVENT_USER_INIT) {
+          return _soran.addUser(data.identifier);
+        } else if (data.kind.length !== 0 && _soran.user.identifier.length !== 0) {
+          switch (data.kind) {
+            case _soran.BUGS_PREFIX + _soran.ERROR:
+              return console.error(data);
+            case _soran.EVENT_LISTEN:
+              return _soran.addMusic(data.track, function(music) {
+                _soran.addArtist(data.track, function(artist) {
+                  return _soran.sing(artist, music, function(success) {
+                    return console.log(success);
+                  });
+                });
+                return _soran.listen(_soran.user, music, function(success) {
+                  return console.log(success);
+                });
+              });
+            default:
+              return console.warn(data);
+          }
+        }
+      } else {
+        return console.error("data.kind is undefined.");
       }
     });
   });
