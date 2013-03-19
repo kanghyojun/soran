@@ -22,32 +22,35 @@ __soran =
     that = this
     trackIdentifier = this.NAVER_PREFIX + "-" + n
     options =
-      type: 'xhr'
-      method: 'get'
-      onload: (res) ->
-        console.log res
-        console.log decodeURIComponent(res)
-        console.log JSON.parse(decodeURIComponent(res))
+      type: 'GET'
       url: this.NAVER_TRACK_API_URL + n
+      success: (data) ->
+        console.log data
+        decoded = decodeURIComponent data
+        nTrack = decoded.resultvalue[0]
         d =
           track: {}
 
+        artistName = nTrack.artist[0].artistname.replace('+', ' ')
+        albumTitle = nTrack.album.albumtitle.replace('+', ' ')
+        trackTitle = nTrack.tracktitle.replace('+', ' ')
         d.track = that.track(trackIdentifier,
-                             'data.track.artist_nm',
-                             'data.track.album_artist_nm',
-                             'data.track.album_title',
-                             'data.track.track_title',
-                             'data.track.genre_dtl',
-                             'data.track.len',
-                             'data.track.release_ymd')
+                             artistName,
+                             artistName,
+                             albumTitle,
+                             tracktitle,
+                             "Unknown",
+                             that.nowPlaying.len,
+                             "Unknown")
         callback d
-      onerror: (res) ->
-        console.error 'Error occured in __soran.getnaveTrackInfo, ', res
-        callback type: that.ERROR
+      error: (jqXHR, textStatus, errorThrow) ->
+        console.log 'error, ', textStatus
+        d =
+          kind: that.BUGS_PREFIX + that.ERROR
+          msg: "Bugs API dosen't response. error text: #{ textStatus }"
+        callback d
 
-    jindoAjax = new $Ajax(that.NAVER_TRACK_API_URL + n, options)
-    jindoAjax.request()
-    true
+    jQuery.ajax options
 
   getBugsTrackInfo: (n, callback) ->
     console.log 'getBugsTrackInfo'
