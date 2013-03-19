@@ -29,7 +29,7 @@
         "http://bugs.co.kr/*",
         "http://*.bugs.co.kr/*"
       ],
-      "js": ["contentScript.js"],
+      "js": ["jquery.js","contentScript.js"],
       "run_at": "document_end"
     }
   ]
