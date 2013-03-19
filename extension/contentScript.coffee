@@ -5,7 +5,9 @@ __soran =
   EVENT_USER_INIT: 'userInit'
   EVENT_LISTEN: 'listen'
   BUGS_TRACK_API_URL: "http://music.bugs.co.kr/player/track/"
+  NAVER_TRACK_API_URL: "http://player.music.naver.com/api.nhn?m=songinfo&trackid="
   BUGS_DOMAIN: 'bugs.co.kr'
+  NAVER_DOMAIN: 'naver.com'
   ERROR: 'Error'
   servicePrefix: ''
   isListen: false
