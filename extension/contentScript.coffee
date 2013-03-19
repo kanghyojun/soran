@@ -32,8 +32,11 @@ __soran =
           track: {}
 
         artistName = nTrack.artist[0].artistname.replace('+', ' ')
+        console.log artistName
         albumTitle = nTrack.album.albumtitle.replace('+', ' ')
+        console.log albumTitle
         trackTitle = nTrack.tracktitle.replace('+', ' ')
+        console.log trackTitle
         d.track = that.track(trackIdentifier,
                              artistName,
                              artistName,
@@ -96,18 +99,29 @@ __soran =
     else
       ''
 
-  init: (conn) ->
+  init: (service, conn) ->
     this.conn = conn
     that = this
-
-    jQuery(document).on 'click', () ->
-      bugsUserNameCover = jQuery('.username strong')
-      if document.domain is that.BUGS_DOMAIN and bugsUserNameCover.length isnt 0
-        that.servicePrefix = that.BUGS_PREFIX
-        d =
-          kind: that.EVENT_USER_INIT
-          identifier: that.getUserIdentifier bugsUserNameCover.text()
-        that.conn.postMessage d
+    switch service
+      when this.BUGS_PREFIX
+        jQuery(document).on 'click', ->
+          $bugsUserNameCover = jQuery('.username strong')
+          if document.domain is that.BUGS_DOMAIN and $bugsUserNameCover.length isnt 0
+            that.servicePrefix = that.BUGS_PREFIX
+            d =
+              kind: that.EVENT_USER_INIT
+              identifier: that.getUserIdentifier $bugsUserNameCover.text()
+            that.conn.postMessage d 
+      when this.NAVER_PREFIX
+        jQuery(document).on 'click', ->
+          $naverUserName = jQuery('#gnb_nicknm_txt')
+          console.log $naverUserName
+          if document.domain is that.NAVER_DOMAIN and $naverUserName.length isnt 0
+            that.servicePrefix = that.NAVER_PREFIX
+            d =
+              kind: that.EVENT_USER_INIT
+              identifier: that.getUserIdentifier $naverUserName.text()
+            that.conn.postMessage d
 
   track: (id, artist, albumArtist, albumTitle, title, genre, length, releaseDate) ->
     data =
@@ -140,29 +154,46 @@ __soran =
     if this.isListen 
       this.isListen = false
 
-    switch (kind)
+    console.log 'here'
+
+    switch kind
       when this.BUGS_PREFIX
         thisService = this.BUGS_PREFIX
         nowProgress = jQuery('.progress .bar').attr('style').substr(7, 2)
         nowPlaying = jQuery('.nowPlaying').find('.trackInfo')
-        nowId = nowPlaying.attr('id')
-        nowLen = nowPlaying.attr('duration')
-        this.nowPlaying.id = nowId
-        console.log '1 >', time
         if nowPlaying.length is 0 
           console.log 'here, '
           setTimeout f, 1000
           return false 
-
-        console.log 'style, ', jQuery('.progress .bar').attr('style')
-        console.log 'nowProgress, ', nowProgress 
+        else
+          nowId = nowPlaying.attr('id')
+          nowLen = nowPlaying.attr('duration')
+          this.nowPlaying.id = nowId
+          console.log '1 >', time 
+          console.log 'style, ', jQuery('.progress .bar').attr('style')
+          console.log 'nowProgress, ', nowProgress 
       when this.NAVER_PREFIX
-        thisService = this.NAVER_PREFIX
-        nowProgress = $$.getSingle('.progress .play_value').style.width.substr(0,2)
-        $nowPlayingTd = $$.getSingle('.play_list_table tr.playing td.title') 
-        nowLen = $$.getSingle('.progress .total_time').textContent
-        [r, i] = $nowPlayingTd.classList.item(0).substr(4).split(',')
-        this.nowPlaying.id = i.split(":")[1]
+        console.log 'hum'        
+        console.log 'y----------------'
+        thisService = this.NAVER_PREFIX 
+        $nowProgressBar = jQuery('.progress .play_value')
+        console.log 'now progress bar, ', $nowProgressBar
+        console.log 'now Progress text, ', $nowProgressBar.css('width')
+        console.log 'now Progress text2, ', $nowProgressBar.attr('style').substr(7, 2)
+
+        if $nowProgressBar.length is 0
+          console.log 'delay'
+          setTimeout f, 1000
+          return false
+        else
+          nowProgress = $nowProgressBar.attr('style').substr(7, 2)
+          $nowPlayingTd = jQuery('.play_list_table tr.playing td.title') 
+          console.log $nowPlayingTd
+          console.log $nowPlayingTd.attr('class')
+          console.log 'naver track id, ', $nowPlayingTd.attr('class').split(" ")[0].split(",")[1].split(":")[1]
+          nowLen = jQuery('.progress .total_time').text()
+          this.nowPlaying.id = $nowPlayingTd.attr('class').split(" ")[0].split(",")[1].split(":")[1]
+          console.log 'y'
       else
         this.isListen = false
         time = 100000
@@ -172,6 +203,7 @@ __soran =
     min = parseInt min
     sec = parseInt sec
     this.nowPlaying.len = (sec + (min * 60)) * 1000 
+    console.log '---!!!!!!!!!!'
     if nowProgress.search('%') == 1 or nowProgress.search('p') == 1
       time = this.nowPlaying.len * 0.7
       console.log '2 >', time
@@ -190,10 +222,14 @@ __soran =
       console.log '3 >', time  
 
     console.log '4 >', time
+    console.log 'len, ', nowLen
+    console.log 'progress, ', nowProgress
     if time isnt 0
-      console.log 'hey time', time
       console.log "call ended"
       setTimeout(f, time)
+    else
+      console.log 'call here'
+      setTimeout f, 10000
     this
 
 

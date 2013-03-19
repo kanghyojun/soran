@@ -9,7 +9,9 @@
     EVENT_USER_INIT: 'userInit',
     EVENT_LISTEN: 'listen',
     BUGS_TRACK_API_URL: "http://music.bugs.co.kr/player/track/",
+    NAVER_TRACK_API_URL: "http://player.music.naver.com/api.nhn?m=songinfo&trackid=",
     BUGS_DOMAIN: 'bugs.co.kr',
+    NAVER_DOMAIN: 'naver.com',
     ERROR: 'Error',
     servicePrefix: '',
     isListen: false,
@@ -18,6 +20,43 @@
     nowPlaying: {
       id: '',
       len: 0
+    },
+    getNaverTrackInfo: function(n, callback) {
+      var options, that, trackIdentifier;
+      console.log('getNaverTrackInfo');
+      that = this;
+      trackIdentifier = this.NAVER_PREFIX + "-" + n;
+      options = {
+        type: 'GET',
+        url: this.NAVER_TRACK_API_URL + n,
+        success: function(data) {
+          var albumTitle, artistName, d, decoded, nTrack, trackTitle;
+          console.log(data);
+          decoded = decodeURIComponent(data);
+          nTrack = decoded.resultvalue[0];
+          d = {
+            track: {}
+          };
+          artistName = nTrack.artist[0].artistname.replace('+', ' ');
+          console.log(artistName);
+          albumTitle = nTrack.album.albumtitle.replace('+', ' ');
+          console.log(albumTitle);
+          trackTitle = nTrack.tracktitle.replace('+', ' ');
+          console.log(trackTitle);
+          d.track = that.track(trackIdentifier, artistName, artistName, albumTitle, tracktitle, "Unknown", that.nowPlaying.len, "Unknown");
+          return callback(d);
+        },
+        error: function(jqXHR, textStatus, errorThrow) {
+          var d;
+          console.log('error, ', textStatus);
+          d = {
+            kind: that.BUGS_PREFIX + that.ERROR,
+            msg: "Bugs API dosen't response. error text: " + textStatus
+          };
+          return callback(d);
+        }
+      };
+      return jQuery.ajax(options);
     },
     getBugsTrackInfo: function(n, callback) {
       var options, that, trackIdentifier;
@@ -57,7 +96,7 @@
           return callback(d);
         }
       };
-      $.ajax(options);
+      jQuery.ajax(options);
       return true;
     },
     getUserIdentifier: function(n) {
@@ -67,22 +106,39 @@
         return '';
       }
     },
-    init: function(conn) {
+    init: function(service, conn) {
       var that;
       this.conn = conn;
       that = this;
-      return $(document).on('click', function() {
-        var bugsUserNameCover, d;
-        bugsUserNameCover = $('.username strong');
-        if (document.domain === that.BUGS_DOMAIN && bugsUserNameCover.length !== 0) {
-          that.servicePrefix = that.BUGS_PREFIX;
-          d = {
-            kind: that.EVENT_USER_INIT,
-            identifier: that.getUserIdentifier(bugsUserNameCover.text())
-          };
-          return that.conn.postMessage(d);
-        }
-      });
+      switch (service) {
+        case this.BUGS_PREFIX:
+          return jQuery(document).on('click', function() {
+            var $bugsUserNameCover, d;
+            $bugsUserNameCover = jQuery('.username strong');
+            if (document.domain === that.BUGS_DOMAIN && $bugsUserNameCover.length !== 0) {
+              that.servicePrefix = that.BUGS_PREFIX;
+              d = {
+                kind: that.EVENT_USER_INIT,
+                identifier: that.getUserIdentifier($bugsUserNameCover.text())
+              };
+              return that.conn.postMessage(d);
+            }
+          });
+        case this.NAVER_PREFIX:
+          return jQuery(document).on('click', function() {
+            var $naverUserName, d;
+            $naverUserName = jQuery('#gnb_nicknm_txt');
+            console.log($naverUserName);
+            if (document.domain === that.NAVER_DOMAIN && $naverUserName.length !== 0) {
+              that.servicePrefix = that.NAVER_PREFIX;
+              d = {
+                kind: that.EVENT_USER_INIT,
+                identifier: that.getUserIdentifier($naverUserName.text())
+              };
+              return that.conn.postMessage(d);
+            }
+          });
+      }
     },
     track: function(id, artist, albumArtist, albumTitle, title, genre, length, releaseDate) {
       var data;
@@ -104,53 +160,61 @@
     */
 
     tick: function(kind, callback) {
-      var f, min, nowId, nowPlaying, nowProgress, nowProgressInt, remainPercentage, remainTime, sec, that, time, _ref;
+      var $nowPlayingTd, $nowProgressBar, f, min, nowId, nowLen, nowPlaying, nowProgress, nowProgressInt, remainPercentage, remainTime, sec, that, thisService, time, _ref;
       console.log("ticking started, ", kind);
       that = this;
       time = 0;
+      nowProgress = 0;
+      nowLen = '';
+      thisService = '';
       f = function() {
         console.log('applied');
         that.tick.apply(that, [kind, callback]);
         return true;
       };
+      if (this.isListen) {
+        this.isListen = false;
+      }
+      console.log('here');
       switch (kind) {
         case this.BUGS_PREFIX:
-          nowProgress = $('.progress .bar').attr('style').substr(7, 2);
-          nowPlaying = $('.nowPlaying').find('.trackInfo');
-          nowId = nowPlaying.attr('id');
-          _ref = nowPlaying.attr('duration').split(":"), min = _ref[0], sec = _ref[1];
-          this.nowPlaying.id = nowId;
-          min = parseInt(min);
-          sec = parseInt(sec);
-          this.nowPlaying.len = (sec + (min * 60)) * 1000;
-          console.log('1 >', time);
+          thisService = this.BUGS_PREFIX;
+          nowProgress = jQuery('.progress .bar').attr('style').substr(7, 2);
+          nowPlaying = jQuery('.nowPlaying').find('.trackInfo');
           if (nowPlaying.length === 0) {
             console.log('here, ');
             setTimeout(f, 1000);
             return false;
-          }
-          if (this.isListen) {
-            this.isListen = false;
-          }
-          console.log('style, ', $('.progress .bar').attr('style'));
-          console.log('nowProgress, ', nowProgress);
-          if (nowProgress.search('%') === 1 || nowProgress.search('p') === 1) {
-            time = this.nowPlaying.len * 0.7;
-            console.log('2 >', time);
           } else {
-            nowProgressInt = parseInt(nowProgress);
-            time = this.nowPlaying.len * 0.05;
-            console.log(this.nowPlaying.len);
-            if (!this.isListen && this.loggedAt <= nowProgressInt) {
-              this.isListen = true;
-              remainPercentage = (100 - nowProgressInt) / 100;
-              remainTime = this.nowPlaying.len * (remainPercentage + 0.05);
-              console.log(remainPercentage);
-              console.log('remainTime >', remainTime);
-              time = remainTime;
-              callback(this.EVENT_LISTEN, this.nowPlaying.id);
-            }
-            console.log('3 >', time);
+            nowId = nowPlaying.attr('id');
+            nowLen = nowPlaying.attr('duration');
+            this.nowPlaying.id = nowId;
+            console.log('1 >', time);
+            console.log('style, ', jQuery('.progress .bar').attr('style'));
+            console.log('nowProgress, ', nowProgress);
+          }
+          break;
+        case this.NAVER_PREFIX:
+          console.log('hum');
+          console.log('y----------------');
+          thisService = this.NAVER_PREFIX;
+          $nowProgressBar = jQuery('.progress .play_value');
+          console.log('now progress bar, ', $nowProgressBar);
+          console.log('now Progress text, ', $nowProgressBar.css('width'));
+          console.log('now Progress text2, ', $nowProgressBar.attr('style').substr(7, 2));
+          if ($nowProgressBar.length === 0) {
+            console.log('delay');
+            setTimeout(f, 1000);
+            return false;
+          } else {
+            nowProgress = $nowProgressBar.attr('style').substr(7, 2);
+            $nowPlayingTd = jQuery('.play_list_table tr.playing td.title');
+            console.log($nowPlayingTd);
+            console.log($nowPlayingTd.attr('class'));
+            console.log('naver track id, ', $nowPlayingTd.attr('class').split(" ")[0].split(",")[1].split(":")[1]);
+            nowLen = jQuery('.progress .total_time').text();
+            this.nowPlaying.id = $nowPlayingTd.attr('class').split(" ")[0].split(",")[1].split(":")[1];
+            console.log('y');
           }
           break;
         default:
@@ -158,23 +222,57 @@
           time = 100000;
           return false;
       }
+      _ref = nowLen.split(":"), min = _ref[0], sec = _ref[1];
+      min = parseInt(min);
+      sec = parseInt(sec);
+      this.nowPlaying.len = (sec + (min * 60)) * 1000;
+      console.log('---!!!!!!!!!!');
+      if (nowProgress.search('%') === 1 || nowProgress.search('p') === 1) {
+        time = this.nowPlaying.len * 0.7;
+        console.log('2 >', time);
+      } else {
+        nowProgressInt = parseInt(nowProgress);
+        time = this.nowPlaying.len * 0.05;
+        console.log(this.nowPlaying.len);
+        if (!this.isListen && this.loggedAt <= nowProgressInt) {
+          this.isListen = true;
+          remainPercentage = (100 - nowProgressInt) / 100;
+          remainTime = this.nowPlaying.len * (remainPercentage + 0.05);
+          console.log(remainPercentage);
+          console.log('remainTime >', remainTime);
+          time = remainTime;
+          callback("" + thisService + this.EVENT_LISTEN, this.nowPlaying.id);
+        }
+        console.log('3 >', time);
+      }
       console.log('4 >', time);
+      console.log('len, ', nowLen);
+      console.log('progress, ', nowProgress);
       if (time !== 0) {
-        console.log('hey time', time);
         console.log("call ended");
         setTimeout(f, time);
+      } else {
+        console.log('call here');
+        setTimeout(f, 10000);
       }
       return this;
     }
   };
 
-  runTicking = function() {
-    __soran.tick(__soran.BUGS_PREFIX, function(e, trackNum) {
+  runTicking = function(prefix) {
+    __soran.tick(prefix, function(e, trackNum) {
       var d;
       switch (e) {
-        case __soran.EVENT_LISTEN:
+        case __soran.BUGS_PREFIX + __soran.EVENT_LISTEN:
           __soran.getBugsTrackInfo(trackNum, function(d) {
             console.log('calling, ', d);
+            d.kind = __soran.EVENT_LISTEN;
+            return __soran.conn.postMessage(d);
+          });
+          break;
+        case __soran.NAVER_PREFIX + __soran.EVENT_LISTEN:
+          __soran.getNaverTrackInfo(trackNum, function(d) {
+            console.log('calling!, ', d);
             d.kind = __soran.EVENT_LISTEN;
             return __soran.conn.postMessage(d);
           });
@@ -192,13 +290,23 @@
     return true;
   };
 
-  main = function() {
-    __soran.init(chrome.extension.connect());
-    if ($('.progress .bar').length !== 0) {
-      return setTimeout(runTicking, 2000);
+  main = function(s) {
+    var wrap;
+    __soran.init(s, chrome.extension.connect());
+    if (jQuery('.progress .bar').length !== 0 || jQuery('.progress .play_value').length !== 0) {
+      wrap = function() {
+        return runTicking(s);
+      };
+      return setTimeout(wrap, 2000);
     }
   };
 
-  $(document).ready(main);
+  switch (document.domain) {
+    case __soran.NAVER_DOMAIN:
+      main(__soran.NAVER_PREFIX);
+      break;
+    case __soran.BUGS_DOMAIN:
+      main(__soran.BUGS_PREFIX);
+  }
 
 }).call(this);
