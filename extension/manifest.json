@@ -24,11 +24,12 @@
     {
       "matches": [
         "http://music.naver.com/*",
+        "http://player.music.naver.com/*",
         "http://music.bugs.co.kr/*",
         "http://bugs.co.kr/*",
         "http://*.bugs.co.kr/*"
       ],
-      "js": ["jquery.js", "contentScript.js"],
+      "js": ["contentScript.js"],
       "run_at": "document_end"
     }
   ]
