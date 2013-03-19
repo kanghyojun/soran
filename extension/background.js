@@ -105,7 +105,7 @@
           }
         }
       } else {
-        return console.error("data.kind is undefined.");
+        return console.warn("data.kind is undefined.", data);
       }
     });
   });

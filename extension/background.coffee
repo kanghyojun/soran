@@ -81,4 +81,4 @@ chrome.extension.onConnect.addListener (port) ->
             else
               console.warn data
     else
-      console.error "data.kind is undefined."
+      console.warn "data.kind is undefined.", data
