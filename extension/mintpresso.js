@@ -14,7 +14,7 @@
     script.onload = function() {
       return window['mintpresso'].init(key);
     };
-    server = '//192.168.0.174:9000/assets/javascripts/mintpresso-0.1.min.js';
+    server = '//127.0.0.1:9000/assets/javascripts/mintpresso-0.1.min.js';
     if ('https:' === d.location.protocol) {
       script.src = 'https:' + server;
     } else {
@@ -57,11 +57,11 @@
     _servers = [];
     _initialized = false;
     if ('https:' === document.location.protocol) {
-      _servers.push('https:' + '//192.168.0.174:9001');
-      _servers.push('https:' + '//192.168.0.174:9002');
+      _servers.push('https:' + '//127.0.0.1:9001');
+      _servers.push('https:' + '//127.0.0.1:9002');
     } else {
-      _servers.push('http:' + '//192.168.0.174:9001');
-      _servers.push('http:' + '//192.168.0.174:9002');
+      _servers.push('http:' + '//127.0.0.1:9001');
+      _servers.push('http:' + '//127.0.0.1:9002');
     }
     _serverIteration = 0;
     _timeout = 1000;
@@ -337,7 +337,7 @@
         }
       }
       return jQuery.ajax({
-        url: "" + _servers[_serverIteration] + _versionPrefix + "/post/account/" + _accId + "/point?json=" + (JSON.stringify(value)) + "&api_token=" + _key,
+        url: "" + _servers[_serverIteration] + _versionPrefix + "/post/account/" + _accId + "/point?json=" + encodeURIComponent(JSON.stringify(value)) + "&api_token=" + _key,
         type: 'GET',
         async: true,
         cache: false,
