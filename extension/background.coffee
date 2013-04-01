@@ -51,13 +51,21 @@ _soran =
       callback d
 
   listen: (user, music, callback) ->
-    console.log 'listen, ', user, music
-    callback true
+    data = {}
+    data[user.type] = user.identifier
+    data['verb'] = this.SORAN_VERB_LISTEN
+    data[music.type] = music.identifier
+    console.log 'listen, ', data
+    mintpresso.set data, (d) ->
+      callback if d.status.code is 201 or d.status.code is 200 then true else false
 
   sing: (artist, music, callback) ->
-    console.log 'sing, ', artist, music
-    callback true
-
+    data = {}
+    data[artist.type] = artist.identifier
+    data['verb'] = this.SORAN_VERB_SING
+    data[music.type] = music.identifier
+    mintpresso.set data, (d) ->
+      callback if d.status.code is 201 or d.status.code is 200 then true else false
 
 chrome.extension.onConnect.addListener (port) ->
   window["mintpresso"].init(mintpressoAPIKey, {withoutCallback: true})
