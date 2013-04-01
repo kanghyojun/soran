@@ -25,7 +25,6 @@ __soran =
       type: 'GET'
       url: this.NAVER_TRACK_API_URL + n
       success: (data) ->
-        console.log data
         decoded = decodeURIComponent data
         nTrack = decoded.resultvalue[0]
         d =
@@ -60,7 +59,6 @@ __soran =
       type: 'GET'
       url: this.BUGS_TRACK_API_URL + n
       success: (data) ->
-        console.log 'success, ', data
         if data.track isnt undefined
           d =
             track: {}
@@ -174,26 +172,19 @@ __soran =
     this.nowPlaying.len = (sec + (min * 60)) * 1000 
     if nowProgress.search('%') == 1 or nowProgress.search('p') == 1
       time = this.nowPlaying.len * 0.7
-      console.log '2 >', time
     else
       nowProgressInt = parseInt(nowProgress)
       time = this.nowPlaying.len * 0.05
-      console.log this.nowPlaying.len
       if not this.isListen and this.loggedAt <= nowProgressInt 
         this.isListen = true
         remainPercentage = (100 - nowProgressInt) / 100
         remainTime = this.nowPlaying.len * (remainPercentage + 0.05)
-        console.log remainPercentage
-        console.log 'remainTime >', remainTime
         time = remainTime
         callback "#{thisService}#{this.EVENT_LISTEN}", this.nowPlaying.id
-      console.log '3 >', time  
-
-    console.log '4 >', time
     if time isnt 0
-      console.log 'hey time', time
-      console.log "call ended"
       setTimeout(f, time)
+    else
+      setTimeout f, 10000
     this
 
 
@@ -202,12 +193,10 @@ runTicking = (prefix) ->
     switch (e)
       when __soran.BUGS_PREFIX + __soran.EVENT_LISTEN 
         __soran.getBugsTrackInfo trackNum, (d) ->
-          console.log 'calling, ', d
           d.kind = __soran.EVENT_LISTEN
           __soran.conn.postMessage d
       when __soran.NAVER_PREFIX + __soran.EVENT_LISTEN
         __soran.getNaverTrackInfo trackNum, (d) ->
-          console.log 'calling!, ', d
           d.kind = __soran.EVENT_LISTEN
           __soran.conn.postMessage d
       else
