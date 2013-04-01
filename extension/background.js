@@ -60,17 +60,30 @@
         'identifier': d.artist
       };
       console.log('Add artist, ', data);
-      return mintpresso.set(data, function(d) {
-        return callback(d);
+      return mintpresso.set(data, function(dt) {
+        return callback(dt);
       });
     },
     listen: function(user, music, callback) {
-      console.log('listen, ', user, music);
-      return callback(true);
+      var data;
+      data = {};
+      data[user.type] = user.identifier;
+      data['verb'] = this.SORAN_VERB_LISTEN;
+      data[music.type] = music.identifier;
+      console.log('listen, ', data);
+      return mintpresso.set(data, function(d) {
+        return callback(d.status.code === 201 || d.status.code === 200 ? true : false);
+      });
     },
     sing: function(artist, music, callback) {
-      console.log('sing, ', artist, music);
-      return callback(true);
+      var data;
+      data = {};
+      data[artist.type] = artist.identifier;
+      data['verb'] = this.SORAN_VERB_SING;
+      data[music.type] = music.identifier;
+      return mintpresso.set(data, function(d) {
+        return callback(d.status.code === 201 || d.status.code === 200 ? true : false);
+      });
     }
   };
 
