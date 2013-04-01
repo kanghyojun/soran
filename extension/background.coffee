@@ -68,17 +68,17 @@ chrome.extension.onConnect.addListener (port) ->
       if data.kind is _soran.EVENT_USER_INIT
         _soran.addUser data.identifier
       else if data.kind.length isnt 0 and _soran.user.identifier.length isnt 0
-          switch data.kind
-            when _soran.BUGS_PREFIX + _soran.ERROR
-              console.error data
-            when _soran.EVENT_LISTEN
-              _soran.addMusic data.track, (music) ->
-                _soran.addArtist data.track, (artist) ->
-                  _soran.sing artist, music, (success) ->
-                    console.log success
-                _soran.listen _soran.user, music, (success) ->
+        switch data.kind
+          when _soran.BUGS_PREFIX + _soran.ERROR
+            console.error data
+          when _soran.EVENT_LISTEN
+            _soran.addMusic data.track, (music) ->
+              _soran.addArtist data.track, (artist) ->
+                _soran.sing artist, music, (success) ->
                   console.log success
-            else
-              console.warn data
+              _soran.listen _soran.user, music, (success) ->
+                console.log success
+          else
+            console.warn data
     else
       console.warn "data.kind is undefined.", data
