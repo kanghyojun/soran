@@ -47,8 +47,8 @@ _soran =
       'type': this.SORAN_TYPE_ARTIST
       'identifier': d.artist
     console.log 'Add artist, ', data
-    mintpresso.set data, (d) ->
-      callback d
+    mintpresso.set data, (dt) ->
+      callback dt
 
   listen: (user, music, callback) ->
     data = {}
