@@ -31,11 +31,8 @@ __soran =
           track: {}
 
         artistName = nTrack.artist[0].artistname.replace('+', ' ')
-        console.log artistName
         albumTitle = nTrack.album.albumtitle.replace('+', ' ')
-        console.log albumTitle
         trackTitle = nTrack.tracktitle.replace('+', ' ')
-        console.log trackTitle
         d.track = that.track(trackIdentifier,
                              artistName,
                              artistName,
