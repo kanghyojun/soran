@@ -17,7 +17,8 @@
   "permissions": [
     "cookies",
     "http://bugs.co.kr/*",
-    "http://127.0.0.1:9001/*", "http://127.0.0.1:9000/*"
+    "http://*.naver.com/*",
+    "http://175.206.146.230:9000/*", "http://175.206.146.230:9001/*"
   ],
 
   "content_scripts": [
