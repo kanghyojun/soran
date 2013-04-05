@@ -40,7 +40,7 @@ _soran =
         'title': d.title
     console.log 'Add music, ', data
     mintpresso.set data, (dt) ->
-      callback dt
+      callback dt.point
 
   addArtist: (d, callback) ->
     data =
@@ -48,7 +48,7 @@ _soran =
       'identifier': d.artist
     console.log 'Add artist, ', data
     mintpresso.set data, (dt) ->
-      callback dt
+      callback dt.point
 
   listen: (user, music, callback) ->
     data = {}

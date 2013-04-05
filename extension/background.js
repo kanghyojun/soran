@@ -50,7 +50,7 @@
       };
       console.log('Add music, ', data);
       return mintpresso.set(data, function(dt) {
-        return callback(dt);
+        return callback(dt.point);
       });
     },
     addArtist: function(d, callback) {
@@ -61,7 +61,7 @@
       };
       console.log('Add artist, ', data);
       return mintpresso.set(data, function(dt) {
-        return callback(dt);
+        return callback(dt.point);
       });
     },
     listen: function(user, music, callback) {
