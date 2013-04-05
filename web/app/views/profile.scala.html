@@ -14,7 +14,19 @@
       $e = $(e)
       var music = $e.data("music")
       if(music.albumArtist !== void 0 && music.title !== void 0) {
-        $e.html(music.albumArtist + " - " + music.title + $e.text())
+        var splited = $e.attr("id").split("-")
+        var serviceName = splited[0]
+        var trackNum = splited[1]
+        var $a = $("<a></a>");
+
+        if(serviceName == "bugs") {
+          var link ="http://music.bugs.co.kr/newPlayer?trackId=" + trackNum
+          $a.attr("href", "javascript:void(window.open('"+link+"', 'Bugs Player', 'width=384,height=667,resizable=0'))")
+          $a.html(music.albumArtist + " - " + music.title)
+        }
+        
+
+        $e.prepend($a)
       }
     })
   </script>
