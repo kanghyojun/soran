@@ -1,5 +1,21 @@
-@(url: String)
+@(url: String, musics: Iterable[SoranMusic])
 
 @main(Messages("soran.profile.title", url)) {
   <h1>@Messages("soran.profile.welcome", url)</h1>  
+
+  <h2>들었던 노래 목록</h2>
+  <ul id="listen">
+    @musics.map { music =>
+    <li id="@music.affogatoPoint.identifier" data-music="@music.affogatoPoint.data"> | @music.count</li>
+    }
+  </ul>
+  <script type="text/javascript">
+    $("#listen li").each(function(i, e) {
+      $e = $(e)
+      var music = $e.data("music")
+      if(music.albumArtist !== void 0 && music.title !== void 0) {
+        $e.html(music.albumArtist + " - " + music.title + $e.text())
+      }
+    })
+  </script>
 }

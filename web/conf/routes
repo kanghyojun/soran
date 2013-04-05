@@ -4,8 +4,8 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /:userName/@/:serviceName   controllers.Profile.index(serviceName: String, userName: String)
-GET     /:userName/at/:serviceName   controllers.Profile.index(serviceName: String, userName: String)
+
+GET     /$userName<[a-zA-Z0-9]+>@$serviceName<[a-zA-Z]+>  controllers.Profile.index(serviceName: String, userName: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
