@@ -71,6 +71,25 @@ _soran =
       else
         callback true
 
+chrome.browserAction.onClicked.addListener (tab) ->
+  if _soran.user.identifier.length is 0
+    console.log "boo"
+    d =
+      tabId: tab.id
+      popup: "popup.html"
+    chrome.browserAction.setPopup d
+  else 
+    d =
+    url: "http://localhost:9000/" + _soran.user.identifier
+    left: 0
+    top: 0
+    focused: true
+    type: "normal"
+    chrome.windows.create d, (c) ->
+      console.log c
+
+#type ( optional enum of "normal", "popup", "panel", or "detached_panel" )
+
 chrome.extension.onConnect.addListener (port) ->
   window["mintpresso"].init(mintpressoAPIKey, {withoutCallback: true})
   tab = port.sender.tab 
@@ -85,7 +104,6 @@ chrome.extension.onConnect.addListener (port) ->
             console.error data
           when _soran.EVENT_LISTEN
             _soran.addMusic data.track, (music) ->
-              console.log "here is the music, ", music
               _soran.addArtist data.track, (artist) ->
                 _soran.sing artist, music, (success) ->
                   console.log success

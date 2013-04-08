@@ -81,11 +81,40 @@
       data[artist.type] = artist.identifier;
       data['verb'] = this.SORAN_VERB_SING;
       data[music.type] = music.identifier;
-      return mintpresso.set(data, function(d) {
-        return callback(d.status.code === 201 || d.status.code === 200 ? true : false);
+      return mintpresso.get(data, function(d) {
+        if (!(d.edges.length > 0)) {
+          return mintpresso.set(data, function(d) {
+            return callback(d.status.code === 201 || d.status.code === 200 ? true : false);
+          });
+        } else {
+          return callback(true);
+        }
       });
     }
   };
+
+  chrome.browserAction.onClicked.addListener(function(tab) {
+    var d;
+    if (_soran.user.identifier.length === 0) {
+      console.log("boo");
+      d = {
+        tabId: tab.id,
+        popup: "popup.html"
+      };
+      return chrome.browserAction.setPopup(d);
+    } else {
+      d = {
+        url: "http://localhost:9000/" + _soran.user.identifier,
+        left: 0,
+        top: 0,
+        focused: true,
+        type: "normal"
+      };
+      return chrome.windows.create(d, function(c) {
+        return console.log(c);
+      });
+    }
+  });
 
   chrome.extension.onConnect.addListener(function(port) {
     var tab;
