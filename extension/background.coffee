@@ -64,8 +64,12 @@ _soran =
     data[artist.type] = artist.identifier
     data['verb'] = this.SORAN_VERB_SING
     data[music.type] = music.identifier
-    mintpresso.set data, (d) ->
-      callback if d.status.code is 201 or d.status.code is 200 then true else false
+    mintpresso.get data, (d) ->
+      unless d.edges.length > 0
+        mintpresso.set data, (d) ->
+          callback if d.status.code is 201 or d.status.code is 200 then true else false
+      else
+        callback true
 
 chrome.extension.onConnect.addListener (port) ->
   window["mintpresso"].init(mintpressoAPIKey, {withoutCallback: true})
@@ -81,6 +85,7 @@ chrome.extension.onConnect.addListener (port) ->
             console.error data
           when _soran.EVENT_LISTEN
             _soran.addMusic data.track, (music) ->
+              console.log "here is the music, ", music
               _soran.addArtist data.track, (artist) ->
                 _soran.sing artist, music, (success) ->
                   console.log success
