@@ -8,6 +8,10 @@
     TRACK_POSTFIX: "Track",
     EVENT_USER_INIT: 'userInit',
     EVENT_LISTEN: 'listen',
+    BUGS_ARTIST_URL: "http://music.bugs.co.kr/artist/",
+    BUGS_ALBUM_URL: "http://music.bugs.co.kr/album/",
+    NAVER_ARTIST_URL: "http://music.naver.com/artist/home.nhn?artistId=",
+    NAVER_ALBUM_URL: "http://music.naver.com/album/index.nhn?albumId=",
     BUGS_TRACK_API_URL: "http://music.bugs.co.kr/player/track/",
     NAVER_TRACK_API_URL: "http://player.music.naver.com/api.nhn?m=songinfo&trackid=",
     BUGS_DOMAIN: 'bugs.co.kr',
@@ -30,16 +34,18 @@
         type: 'GET',
         url: this.NAVER_TRACK_API_URL + n,
         success: function(data) {
-          var albumTitle, artistName, d, decoded, nTrack, trackTitle;
+          var albumArtist, albumTitle, artistId, artistName, d, decoded, nTrack, trackTitle;
           decoded = decodeURIComponent(data);
           nTrack = decoded.resultvalue[0];
           d = {
             track: {}
           };
           artistName = nTrack.artist[0].artistname.replace('+', ' ');
+          artistId = nTrack.artist[0].artistid;
           albumTitle = nTrack.album.albumtitle.replace('+', ' ');
           trackTitle = nTrack.tracktitle.replace('+', ' ');
-          d.track = that.track(trackIdentifier, artistName, artistName, albumTitle, tracktitle, "Unknown", that.nowPlaying.len, "Unknown");
+          albumArtist = nTrack.artist.length === 1 ? artistName : "Various Artist";
+          d.track = that.track(trackIdentifier, artistName, artistId, albumArtist, albumTitle, nTrack.album.albumid, tracktitle, "Unknown", that.nowPlaying.len, "Unknown");
           return callback(d);
         },
         error: function(jqXHR, textStatus, errorThrow) {
@@ -68,7 +74,7 @@
             d = {
               track: {}
             };
-            d.track = that.track(trackIdentifier, data.track.artist_nm, data.track.album_artist_nm, data.track.album_title, data.track.track_title, data.track.genre_dtl, data.track.len, data.track.release_ymd);
+            d.track = that.track(trackIdentifier, data.track.artist_nm, data.track.artist_id, data.track.album_artist_nm, data.track.album_title, data.track.album_id, data.track.genre_dtl, data.track.len, data.track.release_ymd);
             return callback(d);
           } else {
             d = {
@@ -134,13 +140,15 @@
           });
       }
     },
-    track: function(id, artist, albumArtist, albumTitle, title, genre, length, releaseDate) {
+    track: function(id, artist, artistId, albumArtist, albumTitle, albumId, title, genre, length, releaseDate) {
       var data;
       data = {
         identifier: id,
         artist: artist,
+        artistId: artistId,
         albumArtist: albumArtist,
         albumTitle: albumTitle,
+        albumId: albumId,
         title: title,
         genre: genre,
         length: length,
