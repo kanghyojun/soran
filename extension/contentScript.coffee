@@ -35,12 +35,16 @@ __soran =
           track: {}
 
         artistName = nTrack.artist[0].artistname.replace('+', ' ')
+        artistId = nTrack.artist[0].artistid
         albumTitle = nTrack.album.albumtitle.replace('+', ' ')
         trackTitle = nTrack.tracktitle.replace('+', ' ')
+        albumArtist = if nTrack.artist.length == 1 then artistName else "Various Artist"
         d.track = that.track(trackIdentifier,
                              artistName,
-                             artistName,
+                             artistId,
+                             albumArtist,
                              albumTitle,
+                             nTrack.album.albumid,
                              tracktitle,
                              "Unknown",
                              that.nowPlaying.len,
@@ -69,9 +73,10 @@ __soran =
 
           d.track = that.track(trackIdentifier,
                                data.track.artist_nm,
+                               data.track.artist_id,
                                data.track.album_artist_nm,
                                data.track.album_title,
-                               data.track.track_title,
+                               data.track.album_id,
                                data.track.genre_dtl,
                                data.track.len,
                                data.track.release_ymd)
@@ -121,12 +126,14 @@ __soran =
               identifier: that.getUserIdentifier $naverUserName.text()
             that.conn.postMessage d
 
-  track: (id, artist, albumArtist, albumTitle, title, genre, length, releaseDate) ->
+  track: (id, artist, artistId, albumArtist, albumTitle, albumId, title, genre, length, releaseDate) ->
     data =
       identifier: id
       artist: artist
+      artistId: artistId
       albumArtist: albumArtist
       albumTitle: albumTitle
+      albumId: albumId
       title: title
       genre: genre
       length: length
