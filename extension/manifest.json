@@ -18,7 +18,7 @@
     "cookies",
     "http://bugs.co.kr/*",
     "http://*.naver.com/*",
-    "http://175.206.146.230:9000/*", "http://175.206.146.230:9001/*"
+    "http://api.mintpresso.com:9000/*", "http://api.mintpresso.com:9001/*"
   ],
 
   "content_scripts": [

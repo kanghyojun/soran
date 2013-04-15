@@ -14,7 +14,7 @@
     script.onload = function() {
       return window['mintpresso'].init(key);
     };
-    server = '//175.206.146.230:9000/assets/javascripts/mintpresso-0.1.min.js';
+    server = '//api.mintpresso.com:9000/assets/javascripts/mintpresso-0.1.min.js';
     if ('https:' === d.location.protocol) {
       script.src = 'https:' + server;
     } else {
@@ -57,11 +57,11 @@
     _servers = [];
     _initialized = false;
     if ('https:' === document.location.protocol) {
-      _servers.push('https:' + '//175.206.146.230:9001');
-      _servers.push('https:' + '//175.206.146.230:9002');
+      _servers.push('https:' + '//api.mintpresso.com:9001');
+      _servers.push('https:' + '//api.mintpresso.com:9002');
     } else {
-      _servers.push('http:' + '//175.206.146.230:9001');
-      _servers.push('http:' + '//175.206.146.230:9002');
+      _servers.push('http:' + '//api.mintpresso.com:9001');
+      _servers.push('http:' + '//api.mintpresso.com:9002');
     }
     _serverIteration = 0;
     _timeout = 1000;
