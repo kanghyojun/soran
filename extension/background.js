@@ -2,7 +2,7 @@
 (function() {
   var mintpressoAPIKey, _soran;
 
-  mintpressoAPIKey = "cc64f8ee51c8420172a907baa81285ae::13";
+  mintpressoAPIKey = "240ff06dee7-f79f-423f-9684-0cedd2c13ef3::240";
 
   _soran = {
     BUGS_PREFIX: 'bugs',
