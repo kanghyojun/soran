@@ -13,8 +13,8 @@ class ProfileSpec extends Specification {
     
     "render the user profile page" in {
       running(FakeApplication()) {
-        val profile = route(FakeRequest(GET, "/-/admire")).get 
-        contentAsString(profile) must contain("admire")
+        val profile = route(FakeRequest(GET, "/bugs/@/admire93")).get 
+        contentAsString(profile) must contain("admire93")
       }
     }
   }
