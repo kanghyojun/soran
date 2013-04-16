@@ -11,7 +11,9 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     anorm,
-    "mintpresso" % "mintpresso_2.10" % "0.1.2"
+    "mintpresso" % "mintpresso_2.10" % "0.1.2",
+    "net.databinder.dispatch" % "dispatch-core_2.10" % "0.9.5",
+    "nu.validator.htmlparser" % "htmlparser" % "1.4"
   )
 
 
@@ -19,5 +21,4 @@ object ApplicationBuild extends Build {
     // Add your own project settings here      
     resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
   )
-
 }
