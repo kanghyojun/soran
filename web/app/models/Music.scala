@@ -5,7 +5,7 @@ import com.mintpresso._
 case class Music(affogatoPoint: Point, count: Long)
 
 class SoranModel {
-  val affogato: Affogato = new Affogato("cc64f8ee51c8420172a907baa81285ae", 13)
+  val affogato: Affogato = new Affogato("240ff06dee7-f79f-423f-9684-0cedd2c13ef3", 240)
 }
 
 object Music extends SoranModel {
