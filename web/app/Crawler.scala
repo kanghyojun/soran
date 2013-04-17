@@ -44,7 +44,7 @@ object Crawler {
     }
   }
 
-  def getBugsTrackInfo(id: String): Option[String] = {
+  def getBugsTrackInfo(id: String): Option[Map[Symbol, String]] = {
     val bugsURL = "http://music.bugs.co.kr/player/track/%s".format(id)
 
     Http(url(bugsURL) OK as.String).option().map { data =>
@@ -52,7 +52,32 @@ object Crawler {
         json.map { mapData =>
           try {
             var bugsTrack = mapData.asInstanceOf[Map[String, Any]]("track").asInstanceOf[Map[String, Any]]
-            Some(bugsTrack("trackId").asInstanceOf[Map[String, Double]]("id").toLong.toString)
+            val trackId = bugsTrack("trackId").asInstanceOf[Map[String, Double]]("id").toLong.toString 
+            val trackIdentifier = "bugs-%s".format(trackId)
+            val trackArtistName = bugsTrack("artist_nm").asInstanceOf[String]
+            val trackArtistId = bugsTrack("artist_id").asInstanceOf[Double].toLong.toString
+            val trackAlbumTitle = bugsTrack("album_title").asInstanceOf[String]
+            val trackAlbumArtistName = bugsTrack("album_artist_nm").asInstanceOf[String]
+            val trackAlbumId = bugsTrack("album_id").asInstanceOf[Double].toLong.toString
+            val trackGenre = bugsTrack("genre_dtl").asInstanceOf[String]
+            val trackLen = bugsTrack("len").asInstanceOf[String]
+            val trackRelease = bugsTrack("release_ymd").asInstanceOf[String]
+            val title = bugsTrack("track_title").asInstanceOf[String]
+
+            val data: Map[Symbol, String] = Map( 
+              'music -> trackIdentifier,
+              'identifier -> trackIdentifier,
+              'artist -> trackArtistName,
+              'artistId -> trackArtistId,
+              'albumArtist -> trackAlbumArtistName,
+              'albumTitle -> trackAlbumTitle,
+              'albumId -> trackAlbumId,
+              'title -> title,
+              'genre -> trackGenre,
+              'len -> trackLen,
+              'releaseDate -> trackRelease
+            )
+            Some(data) 
           } catch {
             case e: Throwable => throw new Exception("Bugs Track information is not valid for soran. ==>> %s".format(data)) 
           }
