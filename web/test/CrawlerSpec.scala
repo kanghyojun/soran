@@ -73,6 +73,11 @@ class CrawlerSpec extends Specification {
       Crawler.getNewTrackBugsIds().length must be_>(0)
     }
 
+    "getBugsTrackInfo" in {
+      val trackId = "2949141"
+      Crawler.getBugsTrackInfo(trackId) must beSome[String].which(_ === trackId)
+    }
+
   }
 
 }
