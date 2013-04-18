@@ -75,7 +75,7 @@ class CrawlerSpec extends Specification {
 
     "getBugsTrackInfo" in {
       val trackId = "2949141"
-      Crawler.getBugsTrackInfo(trackId) must beSome[Map[Symbol, String]].which(_('music) === "bugs-" + trackId)
+      Crawler.getBugsTrackInfo(trackId) must beSome[Map[String, String]].which(_("music") === "bugs-" + trackId)
     }
 
   }

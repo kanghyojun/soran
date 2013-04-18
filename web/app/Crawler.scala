@@ -44,7 +44,7 @@ object Crawler {
     }
   }
 
-  def getBugsTrackInfo(id: String): Option[Map[Symbol, String]] = {
+  def getBugsTrackInfo(id: String): Option[Map[String, String]] = {
     val bugsURL = "http://music.bugs.co.kr/player/track/%s".format(id)
 
     Http(url(bugsURL) OK as.String).option().map { data =>
@@ -64,18 +64,17 @@ object Crawler {
             val trackRelease = bugsTrack("release_ymd").asInstanceOf[String]
             val title = bugsTrack("track_title").asInstanceOf[String]
 
-            val data: Map[Symbol, String] = Map( 
-              'music -> trackIdentifier,
-              'identifier -> trackIdentifier,
-              'artist -> trackArtistName,
-              'artistId -> trackArtistId,
-              'albumArtist -> trackAlbumArtistName,
-              'albumTitle -> trackAlbumTitle,
-              'albumId -> trackAlbumId,
-              'title -> title,
-              'genre -> trackGenre,
-              'len -> trackLen,
-              'releaseDate -> trackRelease
+            val data: Map[String, String] = Map( 
+              "music" -> trackIdentifier,
+              "artist" -> trackArtistName,
+              "artistId" -> trackArtistId,
+              "albumArtist" -> trackAlbumArtistName,
+              "albumTitle" -> trackAlbumTitle,
+              "albumId" -> trackAlbumId,
+              "title" -> title,
+              "genre" -> trackGenre,
+              "len" -> trackLen,
+              "releaseDate" -> trackRelease
             )
             Some(data) 
           } catch {
