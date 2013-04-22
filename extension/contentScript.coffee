@@ -33,12 +33,12 @@ __soran =
         nTrack = decoded.resultvalue[0]
         d =
           track: {}
-
         artistName = nTrack.artist[0].artistname.replace('+', ' ')
         artistId = nTrack.artist[0].artistid
         albumTitle = nTrack.album.albumtitle.replace('+', ' ')
         trackTitle = nTrack.tracktitle.replace('+', ' ')
         albumArtist = if nTrack.artist.length == 1 then artistName else "Various Artist"
+
         d.track = that.track(trackIdentifier,
                              artistName,
                              artistId,
@@ -77,6 +77,7 @@ __soran =
                                data.track.album_artist_nm,
                                data.track.album_title,
                                data.track.album_id,
+                               data.track.track_title,
                                data.track.genre_dtl,
                                data.track.len,
                                data.track.release_ymd)
