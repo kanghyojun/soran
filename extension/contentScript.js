@@ -34,18 +34,15 @@
         type: 'GET',
         url: this.NAVER_TRACK_API_URL + n,
         success: function(data) {
-          var albumArtist, albumTitle, artistId, artistName, d, decoded, nTrack, trackTitle;
-          decoded = decodeURIComponent(data);
+          var albumArtist, artistName, d, decoded, nTrack;
+          decoded = JSON.parse(decodeURIComponent(data));
           nTrack = decoded.resultvalue[0];
           d = {
             track: {}
           };
           artistName = nTrack.artist[0].artistname.replace('+', ' ');
-          artistId = nTrack.artist[0].artistid;
-          albumTitle = nTrack.album.albumtitle.replace('+', ' ');
-          trackTitle = nTrack.tracktitle.replace('+', ' ');
           albumArtist = nTrack.artist.length === 1 ? artistName : "Various Artist";
-          d.track = that.track(trackIdentifier, artistName, artistId, albumArtist, albumTitle, nTrack.album.albumid, tracktitle, "Unknown", that.nowPlaying.len, "Unknown");
+          d.track = that.track(trackIdentifier, artistName, nTrack.artist[0].artistid, albumArtist, nTrack.album.albumtitle.replace('+', ' '), nTrack.album.albumid, nTrack.tracktitle.replace('+', ' '), "unknown", jQuery('.progress .total_time').text(), "unknown");
           return callback(d);
         },
         error: function(jqXHR, textStatus, errorThrow) {
@@ -74,7 +71,7 @@
             d = {
               track: {}
             };
-            d.track = that.track(trackIdentifier, data.track.artist_nm, data.track.artist_id, data.track.album_artist_nm, data.track.album_title, data.track.album_id, data.track.genre_dtl, data.track.len, data.track.release_ymd);
+            d.track = that.track(trackIdentifier, data.track.artist_nm, data.track.artist_id, data.track.album_artist_nm, data.track.album_title, data.track.album_id, data.track.track_title, data.track.genre_dtl, data.track.len, data.track.release_ymd);
             return callback(d);
           } else {
             d = {
@@ -111,34 +108,28 @@
       var that;
       this.conn = conn;
       that = this;
-      switch (service) {
-        case this.BUGS_PREFIX:
-          return jQuery(document).on('click', function() {
-            var $bugsUserNameCover, d;
-            $bugsUserNameCover = jQuery('.username strong');
-            if (document.domain === that.BUGS_DOMAIN && $bugsUserNameCover.length !== 0) {
-              that.servicePrefix = that.BUGS_PREFIX;
-              d = {
-                kind: that.EVENT_USER_INIT,
-                identifier: that.getUserIdentifier($bugsUserNameCover.text())
-              };
-              return that.conn.postMessage(d);
-            }
-          });
-        case this.NAVER_PREFIX:
-          return jQuery(document).on('click', function() {
-            var $naverUserName, d;
-            $naverUserName = jQuery('#gnb_nicknm_txt');
-            if (document.domain === that.NAVER_DOMAIN && $naverUserName.length !== 0) {
-              that.servicePrefix = that.NAVER_PREFIX;
-              d = {
-                kind: that.EVENT_USER_INIT,
-                identifier: that.getUserIdentifier($naverUserName.text())
-              };
-              return that.conn.postMessage(d);
-            }
-          });
-      }
+      return jQuery(document).on('click', function() {
+        var $bugsUserNameCover, $naverUserNameCover, cover, d, name, tmpName;
+        $bugsUserNameCover = jQuery('.username strong');
+        $naverUserNameCover = jQuery('strong#gnb_nicknm_txt');
+        cover = null;
+        name = "";
+        if (service === that.BUGS_PREFIX && $bugsUserNameCover.length !== 0) {
+          that.servicePrefix = that.BUGS_PREFIX;
+          name = $bugsUserNameCover.text();
+        } else if (service === that.NAVER_PREFIX && $naverUserNameCover.length !== 0) {
+          that.servicePrefix = that.NAVER_PREFIX;
+          tmpName = $naverUserNameCover.text();
+          name = tmpName.substring(0, tmpName.length - 1);
+        }
+        if (that.servicePrefix.length !== 0 && name.length !== 0) {
+          d = {
+            kind: that.EVENT_USER_INIT,
+            identifier: that.getUserIdentifier(name)
+          };
+          return that.conn.postMessage(d);
+        }
+      });
     },
     track: function(id, artist, artistId, albumArtist, albumTitle, albumId, title, genre, length, releaseDate) {
       var data;
@@ -151,7 +142,7 @@
         albumId: albumId,
         title: title,
         genre: genre,
-        length: length,
+        len: length,
         releaseDate: releaseDate
       };
       return data;
@@ -194,7 +185,7 @@
           break;
         case this.NAVER_PREFIX:
           thisService = this.NAVER_PREFIX;
-          $nowProgressBar = jQuery('.progress .play_value');
+          $nowProgressBar = jQuery('.slider .play_value');
           if ($nowProgressBar.length === 0) {
             setTimeout(f, 1000);
             return false;
@@ -255,8 +246,8 @@
         default:
           console.log('errored');
           d = {
-            kind: __soran.BUGS_PREFIX + __soran.ERROR,
-            msg: 'Unknown error occured in f, contentScript.coffee [line: 146]'
+            kind: __soran.servicePrefix + __soran.ERROR,
+            msg: 'Unknown error occured in f, contentScript.coffee [line: 228]'
           };
           __soran.conn.postMessage(d);
       }
@@ -268,7 +259,7 @@
   main = function(s) {
     var wrap;
     __soran.init(s, chrome.extension.connect());
-    if (jQuery('.progress .bar').length !== 0 || jQuery('.progress .play_value').length !== 0) {
+    if (jQuery('.progress .bar').length !== 0 || jQuery('.slider .play_value').length !== 0) {
       wrap = function() {
         return runTicking(s);
       };

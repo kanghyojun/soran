@@ -43,7 +43,7 @@
           'albumTitle': d.albumTitle,
           'artist': d.artist,
           'genre': d.genre,
-          'length': d.length,
+          'length': d.len,
           'releaseDate': d.releaseDate,
           'title': d.title
         }
@@ -82,7 +82,7 @@
       data['verb'] = this.SORAN_VERB_SING;
       data[music.type] = music.identifier;
       return mintpresso.get(data, function(d) {
-        if (!(d.edges.length > 0)) {
+        if (!(d.edges !== void 0 && d.edges.length > 0)) {
           return mintpresso.set(data, function(d) {
             return callback(d.status.code === 201 || d.status.code === 200 ? true : false);
           });
