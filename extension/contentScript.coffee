@@ -136,7 +136,7 @@ __soran =
       albumId: albumId
       title: title
       genre: genre
-      length: length
+      len: length
       releaseDate: releaseDate
     data
 
