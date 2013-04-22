@@ -65,7 +65,7 @@ _soran =
     data['verb'] = this.SORAN_VERB_SING
     data[music.type] = music.identifier
     mintpresso.get data, (d) ->
-      unless d.edges.length > 0
+      unless d.edges isnt undefined and d.edges.length > 0
         mintpresso.set data, (d) ->
           callback if d.status.code is 201 or d.status.code is 200 then true else false
       else
