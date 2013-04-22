@@ -35,7 +35,7 @@ _soran =
         'albumTitle': d.albumTitle
         'artist': d.artist
         'genre': d.genre
-        'length': d.length
+        'length': d.len
         'releaseDate': d.releaseDate
         'title': d.title
     console.log 'Add music, ', data
