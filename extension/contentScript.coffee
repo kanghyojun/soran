@@ -174,7 +174,7 @@ __soran =
           console.log 'nowProgress, ', nowProgress 
       when this.NAVER_PREFIX
         thisService = this.NAVER_PREFIX 
-        $nowProgressBar = jQuery('.progress .play_value')
+        $nowProgressBar = jQuery('.slider .play_value')
 
         if $nowProgressBar.length is 0
           setTimeout f, 1000
@@ -225,17 +225,17 @@ runTicking = (prefix) ->
       else
         console.log 'errored'
         d =
-          kind: __soran.BUGS_PREFIX + __soran.ERROR
-          msg: 'Unknown error occured in f, contentScript.coffee [line: 146]'
+          kind: __soran.servicePrefix + __soran.ERROR
+          msg: 'Unknown error occured in f, contentScript.coffee [line: 228]'
         __soran.conn.postMessage d
     true
   true
 
 main = (s) ->
   __soran.init s, chrome.extension.connect() 
-  if jQuery('.progress .bar').length isnt 0 or jQuery('.progress .play_value').length isnt 0
+  if jQuery('.progress .bar').length isnt 0 or jQuery('.slider .play_value').length isnt 0
     wrap = ->
-      runTicking s
+      runTicking s 
 
     setTimeout wrap, 2000
 
