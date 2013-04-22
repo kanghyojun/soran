@@ -29,26 +29,25 @@ __soran =
       type: 'GET'
       url: this.NAVER_TRACK_API_URL + n
       success: (data) ->
-        decoded = decodeURIComponent data
+        decoded = JSON.parse decodeURIComponent(data)
         nTrack = decoded.resultvalue[0]
         d =
           track: {}
         artistName = nTrack.artist[0].artistname.replace('+', ' ')
-        artistId = nTrack.artist[0].artistid
-        albumTitle = nTrack.album.albumtitle.replace('+', ' ')
-        trackTitle = nTrack.tracktitle.replace('+', ' ')
         albumArtist = if nTrack.artist.length == 1 then artistName else "Various Artist"
 
-        d.track = that.track(trackIdentifier,
-                             artistName,
-                             artistId,
-                             albumArtist,
-                             albumTitle,
-                             nTrack.album.albumid,
-                             tracktitle,
-                             "Unknown",
-                             that.nowPlaying.len,
-                             "Unknown")
+        d.track = that.track(
+          trackIdentifier,
+          artistName,
+          nTrack.artist[0].artistid,
+          albumArtist,
+          nTrack.album.albumtitle.replace('+', ' '),
+          nTrack.album.albumid,
+          nTrack.tracktitle.replace('+', ' '),
+          "unknown",
+          jQuery('.progress .total_time').text(),
+          "unknown"
+        )
         callback d
       error: (jqXHR, textStatus, errorThrow) ->
         console.log 'error, ', textStatus
@@ -209,7 +208,6 @@ __soran =
     else
       setTimeout f, 10000
     this
-
 
 runTicking = (prefix) ->
   __soran.tick prefix, (e, trackNum) ->
