@@ -107,25 +107,24 @@ __soran =
   init: (service, conn) ->
     this.conn = conn
     that = this
-    switch service
-      when this.BUGS_PREFIX
-        jQuery(document).on 'click', ->
-          $bugsUserNameCover = jQuery('.username strong')
-          if document.domain is that.BUGS_DOMAIN and $bugsUserNameCover.length isnt 0
-            that.servicePrefix = that.BUGS_PREFIX
-            d =
-              kind: that.EVENT_USER_INIT
-              identifier: that.getUserIdentifier $bugsUserNameCover.text()
-            that.conn.postMessage d 
-      when this.NAVER_PREFIX
-        jQuery(document).on 'click', ->
-          $naverUserName = jQuery('#gnb_nicknm_txt')
-          if document.domain is that.NAVER_DOMAIN and $naverUserName.length isnt 0
-            that.servicePrefix = that.NAVER_PREFIX
-            d =
-              kind: that.EVENT_USER_INIT
-              identifier: that.getUserIdentifier $naverUserName.text()
-            that.conn.postMessage d
+    jQuery(document).on 'click', ->
+      $bugsUserNameCover = jQuery('.username strong')
+      $naverUserNameCover = jQuery('strong#gnb_nicknm_txt')
+      cover = null
+      name = ""
+      if service is that.BUGS_PREFIX and $bugsUserNameCover.length isnt 0
+        that.servicePrefix = that.BUGS_PREFIX
+        name = $bugsUserNameCover.text()
+      else if service is that.NAVER_PREFIX and $naverUserNameCover.length isnt 0
+        that.servicePrefix = that.NAVER_PREFIX
+        tmpName = $naverUserNameCover.text()
+        name = tmpName.substring(0, tmpName.length - 1)
+
+      if that.servicePrefix.length isnt 0 and name.length isnt 0
+        d =
+          kind: that.EVENT_USER_INIT
+          identifier: that.getUserIdentifier name
+        that.conn.postMessage d  
 
   track: (id, artist, artistId, albumArtist, albumTitle, albumId, title, genre, length, releaseDate) ->
     data =
