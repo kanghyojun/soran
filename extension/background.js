@@ -34,20 +34,19 @@
       }
     },
     addMusic: function(d, callback) {
-      var data;
+      var data, k, v;
       data = {
         'type': this.SORAN_TYPE_MUSIC,
-        'identifier': d.identifier,
-        'data': {
-          'albumArtist': d.albumArtist,
-          'albumTitle': d.albumTitle,
-          'artist': d.artist,
-          'genre': d.genre,
-          'length': d.len,
-          'releaseDate': d.releaseDate,
-          'title': d.title
-        }
+        'data': {}
       };
+      for (k in d) {
+        v = d[k];
+        if (k === "identifier") {
+          data[k] = d[k];
+        } else {
+          data.data[k] = d[k];
+        }
+      }
       console.log('Add music, ', data);
       return mintpresso.set(data, function(dt) {
         return callback(dt.point);
