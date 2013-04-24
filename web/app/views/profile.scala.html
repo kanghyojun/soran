@@ -4,32 +4,80 @@
   <h1>@Messages("soran.profile.welcome", url)</h1>  
 
   <h2>들었던 노래 목록</h2>
-  <ul id="listen">
-    @musics.map { music =>
-    <li id="@music.affogatoPoint.identifier" data-music="@music.affogatoPoint.data"> | @music.count</li>
-    }
-  </ul>
+  <table id="listen">
+    <thead>
+      <tr>
+        <td>제목</td> 
+        <td>가수</td> 
+        <td>앨범</td> 
+        <td>재생횟수</td> 
+      </tr>
+    </thead>
+    <tbody>
+      @musics.map { music =>
+      <tr id="@music.affogatoPoint.identifier" data-music="@music.affogatoPoint.data" data-music-count="@music.count">
+      </tr>
+      }
+    <tbody>
+  </table>
   <script type="text/javascript">
-    $("#listen li").each(function(i, e) {
+    var BUGS_ARTIST_URL = "http://music.bugs.co.kr/artist/",
+        BUGS_ALBUM_URL = "http://music.bugs.co.kr/album/",
+        NAVER_ARTIST_URL = "http://music.naver.com/artist/home.nhn?artistId=",
+        NAVER_ALBUM_URL = "http://music.naver.com/album/index.nhn?albumId=",
+        BUGS_DIRECT_URL = "http://music.bugs.co.kr/newPlayer?trackId=";
+
+    $("#listen tbody tr").each(function(i, e) {
       $e = $(e)
-      var music = $e.data("music")
+      var music = $e.data("music"),
+          count = $e.data("music-count");
+
       if(music.albumArtist !== void 0 && music.title !== void 0) {
-        var splited = $e.attr("id").split("-")
-        var serviceName = splited[0]
-        var trackNum = splited[1]
-        var $a = $("<a></a>");
+        var splited = $e.attr("id").split("-"),
+            serviceName = splited[0],
+            trackNum = splited[1],
+            getDataColumn = function(titleURL, artistURL, albumURL) {
+              return [
+                '<td class="title">',
+                '<a href="' + titleURL + '">',
+                music.title,
+                '</a>',
+                '</td>',
+                '<td class="artist">',
+                '<a href="' + artistURL + '">',
+                music.artist,
+                '</a>',
+                '</td>',
+                '<td class="album">',
+                '<a href="' + albumURL + '">',
+                music.albumTitle,
+                '</a>',
+                '</td>',
+                '<td class="count">',
+                count,
+                '</td>'
+              ].join('')
+            },
+            $td = null;
 
         if(serviceName == "bugs") {
-          var link ="http://music.bugs.co.kr/newPlayer?trackId=" + trackNum
-          $a.attr("href", "javascript:void(window.open('"+link+"', 'Bugs Player', 'width=384,height=667,resizable=0'))")
-          $a.html(music.artist + " - " + music.title)
+          var link = BUGS_DIRECT_URL + trackNum;
+          $td = $(getDataColumn(
+            "javascript:void(window.open('"+link+"', 'Bugs Player', 'width=384,height=667,resizable=0'))",
+            BUGS_ARTIST_URL + music.artistId,
+            BUGS_ALBUM_URL + music.albumId
+          ))
         } else if(serviceName == "naverMusic") {
-          $a.attr("href", "")
-          $a.html(music.artist + " - " + music.title)
+          $td = $(getDataColumn(
+            "http://music.naver.com/search/search.nhn?query=" + encodeURIComponent(music.title + " " + music.artist),
+            NAVER_ARTIST_URL + music.artistId,
+            NAVER_ALBUM_URL + music.albumId
+          ))
         }
-        
-
-        $e.prepend($a)
+        console.log($td)
+        if($td !== null) {
+          $e.prepend($td)
+        }
       }
     })
   </script>
