@@ -94,7 +94,7 @@
   };
 
   chrome.browserAction.onClicked.addListener(function(tab) {
-    var d;
+    var d, name, service, _ref;
     if (_soran.user.identifier.length === 0) {
       console.log("boo");
       d = {
@@ -103,8 +103,9 @@
       };
       return chrome.browserAction.setPopup(d);
     } else {
+      _ref = _soran.user.identifier.split("@"), name = _ref[0], service = _ref[1];
       d = {
-        url: "http://localhost:9000/" + _soran.user.identifier,
+        url: "http://soran.admire.kr/" + service + "/@/" + name,
         left: 0,
         top: 0,
         focused: true,

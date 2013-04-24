@@ -79,12 +79,13 @@ chrome.browserAction.onClicked.addListener (tab) ->
       popup: "popup.html"
     chrome.browserAction.setPopup d
   else 
+    [name, service] = _soran.user.identifier.split("@")
     d =
-    url: "http://localhost:9000/" + _soran.user.identifier
-    left: 0
-    top: 0
-    focused: true
-    type: "normal"
+      url: "http://soran.admire.kr/#{ service }/@/#{ name }"
+      left: 0
+      top: 0
+      focused: true
+      type: "normal"
     chrome.windows.create d, (c) ->
       console.log c
 
