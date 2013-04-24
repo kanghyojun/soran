@@ -29,15 +29,14 @@ _soran =
   addMusic: (d, callback) ->
     data =
       'type': this.SORAN_TYPE_MUSIC
-      'identifier': d.identifier
-      'data':
-        'albumArtist': d.albumArtist
-        'albumTitle': d.albumTitle
-        'artist': d.artist
-        'genre': d.genre
-        'length': d.len
-        'releaseDate': d.releaseDate
-        'title': d.title
+      'data': {}
+
+    for k, v of d
+      if k is "identifier"
+        data[k] = d[k]
+      else
+        data.data[k] = d[k]
+        
     console.log 'Add music, ', data
     mintpresso.set data, (dt) ->
       callback dt.point
