@@ -78,7 +78,9 @@ chrome.browserAction.onClicked.addListener (tab) ->
       popup: "popup.html"
     chrome.browserAction.setPopup d
   else 
-    [name, service] = _soran.user.identifier.split("@")
+    indexOfAt = _soran.user.identifier.lastIndexOf("@")
+    name = _soran.user.identifier.substr 0, indexOfAt
+    service = _soran.user.identifier.substr(indexOfAt + 1, _soran.user.identifier.length)
     d =
       url: "http://soran.admire.kr/#{ service }/@/#{ name }"
       left: 0
