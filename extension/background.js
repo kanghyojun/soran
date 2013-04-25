@@ -93,7 +93,7 @@
   };
 
   chrome.browserAction.onClicked.addListener(function(tab) {
-    var d, name, service, _ref;
+    var d, indexOfAt, name, service;
     if (_soran.user.identifier.length === 0) {
       console.log("boo");
       d = {
@@ -102,7 +102,9 @@
       };
       return chrome.browserAction.setPopup(d);
     } else {
-      _ref = _soran.user.identifier.split("@"), name = _ref[0], service = _ref[1];
+      indexOfAt = _soran.user.identifier.lastIndexOf("@");
+      name = _soran.user.identifier.substr(0, indexOfAt);
+      service = _soran.user.identifier.substr(indexOfAt + 1, _soran.user.identifier.length);
       d = {
         url: "http://soran.admire.kr/" + service + "/@/" + name,
         left: 0,

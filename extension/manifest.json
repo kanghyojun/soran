@@ -3,7 +3,7 @@
 
   "name": "Soran",
   "description": "소란!",
-  "version": "0.1",
+  "version": "0.2",
 
   "browser_action": {
     "default_icon": "icon.png"
