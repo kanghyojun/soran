@@ -12,10 +12,9 @@ object Profile extends Controller {
 
     User.findByIdentifier(uIdentifier).map { p =>  
       val listnedMusics: Iterable[Music] = Music.findByIdentifier(uIdentifier)
-
-      Ok(views.html.profile(userName, listnedMusics))
+      Ok(views.html.playlist(userName, listnedMusics))
     }.getOrElse {
-      NotFound("Sorry")
+      NotFound("죄송합니다! uIdentifier님의 페이지를 찾을수 없습니다.")
     }
   }
 }

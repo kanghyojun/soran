@@ -175,9 +175,12 @@
 .fui-camera-24:before {
   content: "\e004"; }
 
+* {
+  font-family: "Lato", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif; }
+
 body {
   color: #34495e;
-  font: 14px/1.231 "Lato", sans-serif; }
+  font: 12px/1.231 "Lato", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif; }
 
 a {
   color: #1abc9c;
@@ -192,31 +195,37 @@ a {
     text-decoration: none; }
 
 h1 {
+  font-family: "museo-sans", "Lato", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif;
   font-size: 32px;
   font-weight: 900; }
 
 h2 {
+  font-family: "museo-sans", "Lato", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif;
   font-size: 26px;
   font-weight: 700;
   margin-bottom: 2px; }
 
 h3 {
+  font-family: "museo-sans", "Lato", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif;
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 4px;
   margin-top: 2px; }
 
 h4 {
+  font-family: "museo-sans", "Lato", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif;
   font-size: 18px;
   font-weight: 500;
   margin-top: 4px; }
 
 h5 {
+  font-family: "museo-sans", "Lato", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif;
   font-size: 16px;
   font-weight: 500;
   text-transform: uppercase; }
 
 h6 {
+  font-family: "museo-sans", "Lato", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif;
   font-size: 13px;
   font-weight: 500;
   text-transform: uppercase; }
@@ -312,12 +321,12 @@ h6 {
   line-height: 100px; }
   .demo-logo .logo {
     background: url("../images/demo/logo-mask.png") center 0 no-repeat;
-    background-size: 256px 186px;
-    height: 186px;
+    background-size: 203px 199px;
+    height: 199px;
     margin: 0 auto 26px;
     overflow: hidden;
     text-indent: -9999em;
-    width: 256px; }
+    width: 203px; }
   .demo-logo small {
     color: rgba(52, 73, 94, 0.3);
     display: block;
@@ -563,7 +572,7 @@ h6 {
     position: absolute;
     top: 0;
     width: 234px;
-    z-index: -100;
+    z-index: 100;
     -webkit-transform: scale(1, 0.99);
     -webkit-transform-origin: 0 0;
     visibility: hidden;
@@ -808,8 +817,8 @@ input[type="color"],
 .uneditable-input {
   border: 2px solid #dce4ec;
   color: #34495e;
-  font-family: "Lato", sans-serif;
-  font-size: 14px;
+  font-family: "museo-sans", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif;
+  font-size: 12px;
   padding: 8px 0 9px 10px;
   text-indent: 1px;
   -webkit-border-radius: 6px;
@@ -1273,8 +1282,8 @@ textarea,
     background: transparent;
     border: none;
     color: #34495e;
-    font-family: "Lato", sans-serif;
-    font-size: 14px;
+    font-family: "museo-sans", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif;
+    font-size: 12px;
     margin: 0px;
     padding: 0 0 0 5px;
     outline: 0;
@@ -1408,7 +1417,7 @@ textarea,
   border-radius: 6px;
   color: white;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 300;
   display: inline-block;
   zoom: 1;
   *display: inline; }
@@ -1939,7 +1948,7 @@ body.vjs-full-window {
   bottom: 4em;
   left: 1em;
   right: 1em;
-  font-family: "Lato", sans-serif; }
+  font-family: "museo-sans", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif; }
 .video-js .vjs-text-track {
   display: none;
   color: white;
@@ -2155,7 +2164,7 @@ body.vjs-full-window {
   height: 20px;
   width: 50px;
   top: 16px;
-  font: 300 13px "Lato", sans-serif; }
+  font: 300 13px "museo-sans", "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", Arial, sans-serif; }
 
 .vjs-current-time {
   right: 128px;

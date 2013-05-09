@@ -4,7 +4,6 @@
 
 # Home page
 GET     /                           controllers.Application.index
-
 GET     /:serviceName/@/:userName     controllers.Profile.index(serviceName: String, userName: String)
 
 # Map static resources from the /public folder to the /assets URL path

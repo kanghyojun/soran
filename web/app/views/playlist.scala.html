@@ -1,0 +1,115 @@
+@(url: String, musics: Iterable[Music])
+
+@main(Messages("soran.profile.title", url)) {
+<div class="container" role="content">
+
+  <h3>@url 님의 플레이리스트</h3>
+  <hr />
+
+  <button class="btn btn-large btn-block" id="newsfeedButton">뉴스피드 열기</button>
+  <div id="newsfeed" class="row-fluid hide">
+    <ul class="thumbnails">
+      <li class="span3">
+        <div class="thumbnail">
+          <img src="http://image.bugsm.co.kr/album/images/original/3681/368185.jpg" class="img-rounded img-polaroid" />
+          <div class="caption">
+            <h4>최신곡 추천</h4>
+            <p>
+              너에게 간다 (With 김범수)
+              <br />
+              2013 월간 윤종신 Repair 5월호
+              <br />
+              윤종신
+            </p>
+            <p><a href="#" class="btn btn-primary">PLAY</a> <a href="#" class="btn">ADD TO</a></p>
+          </div>
+        </div>
+      </li>
+      <li class="span3">
+        <div class="thumbnail">
+          <img src="http://image.bugsm.co.kr/album/images/original/3684/368438.jpg" class="img-rounded img-polaroid" />
+          <div class="caption">
+            <h4>새로 나온 앨범</h4>
+            <p>The 5th Album Vol.2 [Thank You]</p>
+            <p><a href="#" class="btn btn-primary">PLAY</a> <a href="#" class="btn">ADD TO</a></p>
+          </div>
+        </div>
+      </li>
+      <li class="span3">
+        <div class="thumbnail">
+          <img src="http://image.bugsm.co.kr/artist/images/original/801072/80107247.jpg" class="img-rounded img-polaroid" />
+          <div class="caption">
+            <h4>하비누아주 단독인터뷰</h4>
+            <p>'행복한 구름'이라는 팀명의 의미처럼, 듣는 사람들에게 행복과 즐거움, 위안을 주는 따뜻한 음악. KBS '탑밴드'에도 출연하여 심사위원들의 호평을 받음</p>
+            <p><a href="#" class="btn btn-primary">MORE</a></p>
+          </div>
+        </div>
+      </li>
+      <li class="span3">
+        <div class="thumbnail">
+          <img src="http://image.bugsm.co.kr/artist/images/original/801072/80107247.jpg" class="img-rounded img-polaroid" />
+          <div class="caption">
+            <h4>하비누아주 단독인터뷰</h4>
+            <p>'행복한 구름'이라는 팀명의 의미처럼, 듣는 사람들에게 행복과 즐거움, 위안을 주는 따뜻한 음악. KBS '탑밴드'에도 출연하여 심사위원들의 호평을 받음</p>
+            <p><a href="#" class="btn btn-primary">MORE</a></p>
+          </div>
+        </div>
+      </li>
+      <li class="span3">
+        <div class="thumbnail">
+          <img src="http://image.bugsm.co.kr/album/images/original/3681/368185.jpg" class="img-rounded img-polaroid" />
+          <div class="caption">
+            <h4>최신곡 추천</h4>
+            <p>
+              너에게 간다 (With 김범수)
+              <br />
+              2013 월간 윤종신 Repair 5월호
+              <br />
+              윤종신
+            </p>
+            <p><a href="#" class="btn btn-primary">PLAY</a> <a href="#" class="btn">ADD TO</a></p>
+          </div>
+        </div>
+      </li>
+      <li class="span3">
+        <div class="thumbnail">
+          <img src="http://image.bugsm.co.kr/album/images/original/3684/368438.jpg" class="img-rounded img-polaroid" />
+          <div class="caption">
+            <h4>새로 나온 앨범</h4>
+            <p>The 5th Album Vol.2 [Thank You]</p>
+            <p><a href="#" class="btn btn-primary">PLAY</a> <a href="#" class="btn">ADD TO</a></p>
+          </div>
+        </div>
+      </li>
+      <li class="span3">
+        <div class="thumbnail">
+          <img src="http://image.bugsm.co.kr/artist/images/original/801072/80107247.jpg" class="img-rounded img-polaroid" />
+          <div class="caption">
+            <h4>하비누아주 단독인터뷰</h4>
+            <p>'행복한 구름'이라는 팀명의 의미처럼, 듣는 사람들에게 행복과 즐거움, 위안을 주는 따뜻한 음악. KBS '탑밴드'에도 출연하여 심사위원들의 호평을 받음</p>
+            <p><a href="#" class="btn btn-primary">MORE</a></p>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <button class="btn btn-large btn-block" id="newsfeedButton">뉴스피드 닫기</button>
+  </div>
+
+  <table id="listen" class="table table-striped">
+    <thead>
+      <tr>
+        <td>NAME <i class="icon-caret-down"></i></td> 
+        <td>ARTIST <i class="icon-caret-down"></i></td> 
+        <td>ALBUM <i class="icon-caret-down"></i></td> 
+        <td class="count">PLAYS <i class="icon-caret-down"></i></td> 
+      </tr>
+    </thead>
+    <tbody>
+      @musics.map { music =>
+      <tr id="@music.affogatoPoint.identifier" data-music="@music.affogatoPoint.data" data-music-count="@music.count">
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+}
