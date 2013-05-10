@@ -4,9 +4,9 @@ NAVER_ARTIST_URL = "http://music.naver.com/artist/home.nhn?artistId="
 NAVER_ALBUM_URL = "http://music.naver.com/album/index.nhn?albumId="
 BUGS_DIRECT_URL = "http://music.bugs.co.kr/newPlayer?trackId="
 
-
 $("#listen tbody tr").each (i, e) ->
   $e = $(e)
+  $e.addClass("hide")
   music = $e.data("music")
   count = $e.data("music-count")
   if music.albumArtist isnt undefined and music.title isnt undefined
@@ -52,3 +52,39 @@ $("#listen tbody tr").each (i, e) ->
 
     if $td isnt null
       $e.prepend $td
+
+window.soran =
+  playlists: []
+  sort:
+    referencedAt: (x) ->
+      parseInt $(x).data("music-referenced-at")
+    updatedAt: (x) ->
+      parseInt $(x).data("music-updated-at")
+    artist: (x) ->
+      $(x).data("music").artist
+    album: (x) ->
+      $(x).data("music").albumTitle
+    count: (x) ->
+      parseInt $(x).data("music-count")
+    name: (x) ->
+      $(x).data("music").title
+  currentSort: ''
+  showPlayList: (_by) ->
+    $("#listen").css("cursor", "progress")
+    if window.soran.sort.hasOwnProperty _by
+      if window.soran.currentSort isnt _by
+        lists = $(window.soran.playlists.get().qsort(window.soran.sort[_by]).reverse())
+        window.soran.currentSort = _by
+      else
+        lists = $($("#listen tbody tr").get().reverse())
+
+      $("#listen tbody tr").remove()
+      $("#listen tbody").append(lists)
+      $("#listen tbody tr").removeClass("hide")
+
+
+soran.playlists = $("#listen tbody tr").clone()
+soran.showPlayList "referencedAt"
+
+$("#listen thead tr td").on "click", (e) ->
+  soran.showPlayList $(this).attr("id").split("-")[1]

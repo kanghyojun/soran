@@ -98,15 +98,19 @@
   <table id="listen" class="table table-striped">
     <thead>
       <tr>
-        <td>NAME <i class="icon-caret-down"></i></td> 
-        <td>ARTIST <i class="icon-caret-down"></i></td> 
-        <td>ALBUM <i class="icon-caret-down"></i></td> 
-        <td class="count">PLAYS <i class="icon-caret-down"></i></td> 
+        <td id="by-name">NAME <i class="icon-caret-down"></i></td> 
+        <td id="by-artist">ARTIST <i class="icon-caret-down"></i></td> 
+        <td id="by-album">ALBUM <i class="icon-caret-down"></i></td> 
+        <td id="by-count" class="count">PLAYS <i class="icon-caret-down"></i></td> 
       </tr>
     </thead>
     <tbody>
       @musics.map { music =>
-      <tr id="@music.affogatoPoint.identifier" data-music="@music.affogatoPoint.data" data-music-count="@music.count">
+      <tr id="@music.affogatoPoint.identifier"
+          data-music="@music.affogatoPoint.data"
+          data-music-count="@music.count"
+          data-music-referenced-at="@music.affogatoPoint.referencedAt"
+          data-music-updated-at="@music.affogatoPoint.updatedAt">
       </tr>
       }
     </tbody>
