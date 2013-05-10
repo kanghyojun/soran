@@ -11,7 +11,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     anorm,
-    "mintpresso" % "mintpresso_2.10" % "0.1.7",
+    "mintpresso" % "mintpresso_2.10" % "0.1.9",
     "net.databinder.dispatch" % "dispatch-core_2.10" % "0.9.5",
     "nu.validator.htmlparser" % "htmlparser" % "1.4"
   )
