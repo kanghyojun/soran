@@ -9,4 +9,8 @@ object Application extends Controller {
   def index = Action {
     Ok(views.html.index(Messages("soran.welcome")))
   }
+
+  def help = Action {
+    Ok(views.html.help())
+  }
 }
