@@ -3,7 +3,7 @@
 
   "name": "Soran",
   "description": "소란!",
-  "version": "0.3",
+  "version": "0.4",
 
   "browser_action": {
     "default_icon": "icon.png"
@@ -18,7 +18,7 @@
     "cookies",
     "http://bugs.co.kr/*",
     "http://*.naver.com/*",
-    "http://api.mintpresso.com:9000/*", "http://api.mintpresso.com:9001/*"
+    "http://api.mintpresso.com/*"
   ],
 
   "content_scripts": [
