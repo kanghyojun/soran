@@ -6,6 +6,8 @@ case class Music(affogatoPoint: Point, count: Long)
 
 object Music extends SoranModel {
 
+  def findUserByMusicIdentifier(identifier: String) = affogato.get(None, "user", "?", "listen", None, "music", identifier)
+
   def findByIdentifier(identifier: String): Iterable[Music] = {
     affogato.get(
       None, "user", identifier, "listen", 
