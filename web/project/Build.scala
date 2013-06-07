@@ -22,6 +22,6 @@ object ApplicationBuild extends Build {
     resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository",
     coffeescriptOptions := Seq("native", "/usr/local/bin/coffee -p")
   ).dependsOn(
-    RootProject(uri("git://github.com/admire93/affogato.git"))
+    RootProject(uri("git://github.com/admire93/Affogato.git"))
   )
 }
