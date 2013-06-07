@@ -5,6 +5,7 @@
 # Home page
 GET     /                           controllers.Application.index
 GET     /:serviceName/@/:userName     controllers.Profile.index(serviceName: String, userName: String)
+GET     /musics                      controllers.API.musics(identifier: String ?= "")
 
 GET     /help                       controllers.Application.help
 

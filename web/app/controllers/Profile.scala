@@ -15,7 +15,6 @@ object Profile extends Controller {
         Ok(views.html.playlist(userName, listnedMusics))
       }
       case Left(l) => {
-        println(l.message)
         NotFound(s"죄송합니다! $userName 님의 페이지를 찾을수 없습니다.")
       }
     }

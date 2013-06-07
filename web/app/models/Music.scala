@@ -14,7 +14,6 @@ object Music extends SoranModel {
     var result: List[Music] = List[Music]()
     respond match {
       case Right(d) => {
-        println("respond", d)
         for((k, v) <- d.groupBy(_._object.id)) {
           result = Music(v.head._object, v.length) :: result
         }

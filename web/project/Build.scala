@@ -12,7 +12,7 @@ object ApplicationBuild extends Build {
     jdbc,
     anorm,
     "com.mintpresso" %% "mintpresso" % "0.2.2",
-    "net.databinder.dispatch" % "dispatch-core_2.10" % "0.9.5",
+    "net.databinder.dispatch" % "dispatch-core_2.10" % "0.10.1",
     "nu.validator.htmlparser" % "htmlparser" % "1.4"
   )
 
