@@ -37,7 +37,7 @@ Soran.prototype =
 
   withCircle: ($dest, task, argument, callback) ->
     $p = $($dest.parent())
-    $loading = $("<div class=\"loading\">로딩중입니다...</div>")
+    $loading = $('<div class=\"loading\" style="width: 150px; margin: 0 auto;"><i class="icon-refresh icon-spin" style="font-size:100pt; color: #1ABC9C"></i><br /><h3 style="font-weight: 900">LOADING</h3></div>')
     $p.append($loading)
     f = (c) ->
       $loading.remove()
