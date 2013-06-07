@@ -4,27 +4,24 @@ import com.mintpresso._
 
 object User extends SoranModel {
 
-  def findByIdentifier(identifier: String): Option[Point] = {
-    affogato.get(_type="user", identifier=identifier).as[Option[Point]]
+  def findByIdentifier(identifier: String): Either[Respond, Point] = {
+    return affogato.get(_type="user", identifier=identifier)
   }
 
-  def findNeighborByIdentifier(iden: String): List[Point] = {
-    val listened: List[Music] = Music.findByIdentifier(iden).toList
-    val top10Music: List[Music] = listened.sortWith((m1: Music, m2: Music) => m1.count > m2.count)
-    var userIds: List[Long] = List[Long]()
-    var me: Option[Point] = findByIdentifier(iden)
-    var a: List[(String, String)] = List[(String, String)]()
+  def findNeighborByIdentifier(iden: String): List[(Point, Music)] = {
+    val listened: List[Music] = Music.findByIdentifier(iden)
+    val top10Music: List[Music] = listened.sortWith((m1: Music, m2: Music) => m1.count > m2.count).slice(0, 10)
+    var people: List[(Point, Music)] = List[(Point, Music)]()
 
-    for(u <- me;
-        m <- top10Music;
-        edges <- Music.findUserByMusicIdentifier(m.affogatoPoint.identifier)
+    for(m <- top10Music;
+        edges <- Music.findUserByMusicIdentifier(m.affogatoPoint.identifier).right
     ) {
-      userIds = userIds ++ edges.filter(_.subject.id != u.id).map(_.subject.id)
+      people = people ++ edges.filter(_.subject.identifier != iden).map { e=>
+        (e.subject, m)
+      }
     }
 
-    (for {
-      i: Long <- userIds.toSet
-      p <- affogato.get(i)
-    } yield p).toList
+    return people
   }
+
 }

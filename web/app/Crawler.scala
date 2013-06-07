@@ -64,12 +64,12 @@ class CrawlerActor extends Actor {
               _type = "music",
               identifier = data("music"),
               data = mintData)
-            p.map { rp =>
-              Logger.debug("Point Identifier, " + rp.identifier)
+            p match { 
+              case Right(rp) => Logger.debug("Point Identifier, " + rp.identifier)
+              case Left(_) => Logger.debug("Affogato set failed. {identifier: %s, title: %s}".format(data("music"), data("title")))
             }
-            if(p.isEmpty == true) Logger.debug("Affogato set failed. {identifier: %s, title: %s}".format(data("music"), data("title")))
           } catch {
-            case e: Throwable => Logger.debug("mintdata - " + mintData)            
+            case e: Throwable => Logger.debug("mintdata - " + mintData) 
           }
         }
 
