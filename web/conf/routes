@@ -3,11 +3,13 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
-GET     /:serviceName/@/:userName     controllers.Profile.index(serviceName: String, userName: String)
-GET     /musics                      controllers.API.musics(identifier: String ?= "")
+GET     /                              controllers.Application.index
+GET     /:serviceName/@/:userName      controllers.Profile.index(serviceName: String, userName: String)
 
-GET     /help                       controllers.Application.help
+GET     /musics                        controllers.API.musics(identifier: String ?= "")
+GET     /neighbor                      controllers.API.neighbor(identifier: String ?= "")
+
+GET     /help                          controllers.Application.help
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

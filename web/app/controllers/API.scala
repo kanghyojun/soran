@@ -38,6 +38,16 @@ trait JSONRespone {
     }
   }
 
+  implicit val pnmWrites = new Writes[Map[Point, List[Music]]] {
+    def writes(m: Map[Point, List[Music]]): JsValue = {
+      var l: List[JsValue] = List[JsValue]()
+      for((k,v) <- m) {
+        l = Json.obj("person" -> k, "musics" -> v) :: l
+      }
+      Json.toJson(l)
+    }
+  }
+
   def JsonOk(code: Int, message: String, content: JsValue): Result = {
     val json = Json.stringify(Json.obj(
       "code" -> code,
@@ -62,5 +72,11 @@ object API extends Controller with JSONRespone {
   def musics(identifier: String) = Action {
     val musics: List[Music] = Music.findByIdentifier(identifier)
     JsonOk(200, "", Json.toJson(musics))
+  }
+
+  def neighbor(identifier: String) = Action {
+    val neighbor: Map[Point, List[Music]] = User.findNeighborByIdentifier(identifier)
+    
+    JsonOk(200, "", Json.toJson(neighbor))
   }
 }

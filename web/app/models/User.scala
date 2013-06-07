@@ -6,9 +6,9 @@ object User extends SoranModel {
 
   def findByIdentifier(identifier: String): Either[Respond, Point] = {
     return affogato.get(_type="user", identifier=identifier)
-  }
+  } 
 
-  def findNeighborByIdentifier(iden: String): List[(Point, Music)] = {
+  def findNeighborByIdentifier(iden: String): Map[Point, List[Music]] = {
     val listened: List[Music] = Music.findByIdentifier(iden)
     val top10Music: List[Music] = listened.sortWith((m1: Music, m2: Music) => m1.count > m2.count).slice(0, 10)
     var people: List[(Point, Music)] = List[(Point, Music)]()
@@ -21,7 +21,7 @@ object User extends SoranModel {
       }
     }
 
-    return people
+    return people.groupBy(_._1).mapValues(_.map(_._2))
   }
 
 }
