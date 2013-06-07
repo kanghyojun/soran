@@ -2,6 +2,7 @@ package com.soran
 
 import scala.concurrent.duration._
 import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 import java.util.Date
 
