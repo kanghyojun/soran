@@ -5,9 +5,11 @@
 # Home page
 GET     /                              controllers.Application.index
 GET     /:serviceName/@/:userName      controllers.Profile.index(serviceName: String, userName: String)
+GET     /stats/:serviceName/@/:userName      controllers.Stats.user(serviceName: String, userName: String)
 
-GET     /musics                        controllers.API.musics(identifier: String ?= "")
+GET     /musics                        controllers.API.musics(identifier: String ?= "", specific: Boolean ?= false)
 GET     /neighbor                      controllers.API.neighbor(identifier: String ?= "")
+GET     /edge                          controllers.API.edge(identifier: String ?= "")
 
 GET     /help                          controllers.Application.help
 

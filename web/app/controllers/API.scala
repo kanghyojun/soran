@@ -6,7 +6,7 @@ import play.api.libs.iteratee._
 import play.api.libs.json._
 
 import models._
-import com.mintpresso.Point
+import com.mintpresso.{Point, Edge}
 
 trait JSONRespone {
   implicit val bigIntWrites = new Writes[BigInt] {
@@ -48,6 +48,28 @@ trait JSONRespone {
     }
   }
 
+  implicit val edgeWrites = new Writes[Edge] {
+    def writes(l: Edge): JsValue = {
+      Json.obj(
+        "subject" -> l.subject,
+        "verb" -> l.verb,
+        "object" -> l._object,
+        "_url" -> l.url,
+        "createdAt" -> l.createdAt
+      )
+    }
+  }
+
+  implicit val mWrites = new Writes[Map[Point, List[Point]]] {
+    def writes(m: Map[Point, List[Point]]): JsValue = {
+      var l: List[JsValue] = List[JsValue]()
+      for((k, v) <- m) {
+        l = Json.obj("person" -> k, "musics" -> v) :: l
+      }
+      Json.toJson(l)
+    }
+  }
+
   def JsonOk(code: Int, message: String, content: JsValue): Result = {
     val json = Json.stringify(Json.obj(
       "code" -> code,
@@ -69,9 +91,18 @@ trait JSONRespone {
 }
 
 object API extends Controller with JSONRespone {
-  def musics(identifier: String) = Action {
-    val musics: List[Music] = Music.findByIdentifier(identifier)
-    JsonOk(200, "", Json.toJson(musics))
+  def musics(identifier: String, specific: Boolean) = Action {
+    var json: JsValue = null
+    if(specific) {
+      println("specific true")
+      val musics: Map[Point, List[Point]] = Music.findAllByIdentifier(identifier)
+      json = Json.toJson(musics)
+    } else {
+      val musics: List[Music] = Music.findByIdentifier(identifier)
+      json = Json.toJson(musics)
+    }
+
+    JsonOk(200, "", json)
   }
 
   def neighbor(identifier: String) = Action {
@@ -79,4 +110,17 @@ object API extends Controller with JSONRespone {
     
     JsonOk(200, "", Json.toJson(neighbor))
   }
+
+  def edge(identifier: String) = Action {
+    val s = new SoranModel()
+    s.affogato.get(
+      None, "user", identifier, "listen",
+      None, "music", "?", false) match {
+      case Right(edges) => {
+        JsonOk(200, "", Json.toJson(edges))
+      }
+      case Left(r) => JsonOk(r.code.toInt, r.message, JsString(""))
+    }
+  }
+
 }
