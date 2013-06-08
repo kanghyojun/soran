@@ -1,4 +1,4 @@
-BUGS_ARTIST_URL = "http://music.bugs.co.kr/artist/"
+tUGS_ARTIST_URL = "http://music.bugs.co.kr/artist/"
 BUGS_ALBUM_URL = "http://music.bugs.co.kr/album/"
 NAVER_ARTIST_URL = "http://music.naver.com/artist/home.nhn?artistId="
 NAVER_ALBUM_URL = "http://music.naver.com/album/index.nhn?albumId="
@@ -62,7 +62,7 @@ Soran.prototype =
     $.ajax option
     true
 
-  init: (identifier) ->
+  initPlaylist: (identifier) ->
     that = this
     this.withCircle $("#listen"), this.getPlayList, [identifier], (d) ->
       $tbody = $("#listen tbody")
@@ -119,9 +119,3 @@ Soran.prototype =
       that.showPlayList "referencedAt"
 
 window.soran = new Soran()
-owner = $("#listen").data('owner')
-if owner isnt null
-  soran.init(owner)
-
-$("#listen thead tr td").on "click", (e) ->
-  soran.showPlayList $(this).attr("id").split("-")[1]
