@@ -1,0 +1,13 @@
+@(url: String, identifier: String)
+
+@main("통계 페이지") {
+<div class="container" role="content">
+  <h3>@url 님의 음악 생활.</h3>
+
+  <ul class="stat-decision">
+    <li>요일별로</li>
+  </ul>
+  <div id="stats" data-identifier="@identifier">
+  </div>
+</div>
+}
