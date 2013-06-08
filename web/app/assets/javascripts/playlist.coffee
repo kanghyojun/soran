@@ -119,7 +119,9 @@ Soran.prototype =
       that.showPlayList "referencedAt"
 
 window.soran = new Soran()
-soran.init($("#listen").data('owner'))
+owner = $("#listen").data('owner')
+if owner.length > 0
+  soran.init(owner)
 
 $("#listen thead tr td").on "click", (e) ->
   soran.showPlayList $(this).attr("id").split("-")[1]
