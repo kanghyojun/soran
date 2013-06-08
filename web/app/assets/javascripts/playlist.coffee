@@ -120,7 +120,7 @@ Soran.prototype =
 
 window.soran = new Soran()
 owner = $("#listen").data('owner')
-if owner.length > 0
+if owner isnt null
   soran.init(owner)
 
 $("#listen thead tr td").on "click", (e) ->
