@@ -56,8 +56,21 @@ Soran.prototype =
         callback(d)
       error: (e, j, x) ->
         errorResp =
-            code: 500
+          code: 500
         callback(errorResp)
+
+    $.ajax option
+    true
+  
+  getAllEdge: (identifier, callback) ->
+    option =
+      url: "/edge?identifier=#{ identifier }"
+      success: (d) ->
+        callback d
+      error: (e, j, x) ->
+        errorResp=
+          code: 500
+        callback errorResp
 
     $.ajax option
     true
