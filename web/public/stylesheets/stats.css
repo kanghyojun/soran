@@ -1,0 +1,24 @@
+#stats .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+#stats .x.axis path {
+    display: none;
+}
+
+#stats .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+#stats .y.axis line {
+    stroke: #eee;
+}
+
+#stats .y.axis path {
+    stroke-width: 0
+}
+
