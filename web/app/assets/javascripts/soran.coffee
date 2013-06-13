@@ -35,7 +35,7 @@ Soran.prototype =
       $("#listen tbody").append(lists)
     true
 
-  withCircle: ($dest, task, argument, callback) ->
+  withCircle: ($dest, env, task, argument, callback) ->
     $p = $($dest.parent())
     $loading = $('<div class=\"loading\" style="width: 150px; margin: 0 auto;"><i class="icon-refresh icon-spin" style="font-size:100pt; color: #1ABC9C"></i><br /><h3 style="font-weight: 900">LOADING</h3></div>')
     $p.append($loading)
@@ -44,7 +44,7 @@ Soran.prototype =
       callback(c)
 
     argument.push(f)
-    task.apply(this, argument)
+    task.apply(env, argument)
     true
 
   getPlayList: (identifier, callback) ->
@@ -67,17 +67,13 @@ Soran.prototype =
       url: "/edge?identifier=#{ identifier }"
       success: (d) ->
         callback d
-      error: (e, j, x) ->
-        errorResp=
-          code: 500
-        callback errorResp
 
     $.ajax option
     true
 
   initPlaylist: (identifier) ->
     that = this
-    this.withCircle $("#listen"), this.getPlayList, [identifier], (d) ->
+    this.withCircle $("#listen"), this, this.getPlayList, [identifier], (d) ->
       $tbody = $("#listen tbody")
       tbody = ""
       if d.code == 200
