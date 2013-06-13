@@ -1,8 +1,10 @@
-@(url: String, identifier: String)
+@(url: String, serviceName: String, identifier: String)
 
 @main(Messages("soran.profile.title", url)) {
 <div class="container" role="content">
   <h3>@url 님의 플레이리스트</h3>
+
+  <a href="@routes.Stats.user(serviceName, url)"> @url님의 통계 보러가기!</a>
   <hr />
 
   <button class="btn btn-large btn-block" id="newsfeedButton">뉴스피드 열기</button>
