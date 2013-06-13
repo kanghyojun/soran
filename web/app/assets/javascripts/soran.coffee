@@ -1,4 +1,4 @@
-tUGS_ARTIST_URL = "http://music.bugs.co.kr/artist/"
+BUGS_ARTIST_URL = "http://music.bugs.co.kr/artist/"
 BUGS_ALBUM_URL = "http://music.bugs.co.kr/album/"
 NAVER_ARTIST_URL = "http://music.naver.com/artist/home.nhn?artistId="
 NAVER_ALBUM_URL = "http://music.naver.com/album/index.nhn?albumId="
