@@ -5,6 +5,7 @@ Stats = () ->
 
 Stats.prototype =
   cached: ''
+  ratio: 0
   getData: (callback) ->
     that = this
     if this.cached.length isnt 0
@@ -88,17 +89,16 @@ Stats.prototype =
 
     data.qsort (x) ->
       x['day']
-    ratio = circle100Radius / parseFloat(Math.sqrt(max))
+    this.ratio = circle100Radius / parseFloat(Math.sqrt(max))
     callback data
 
   drawPunch: (grouped) ->
+    that = this
     this.sortPunch grouped, (punchSortedData) ->
-      console.log 'imdrawpunch'
       dayText = ['일요일', '월요일', '화요일',
                  '수요일', '목요일', '금요일', '토요일']
       w = 750
       h = 600
-      ratio = 1
       leftMargin = 100
       punchMargin = 1
       circle1002R = ((w - 100) / 24.0) - (punchMargin * 2)
@@ -116,7 +116,7 @@ Stats.prototype =
         circle.attr 'cy', 0
         circle.attr 'fill', '#494949'
         circle.attr 'r', (d) ->
-          Math.sqrt(d['len']) * ratio
+          Math.sqrt(d['len']) * that.ratio
         circle.on 'mouseover', (d) ->
           h = parseInt(d['hour'])
           d = parseInt(sortedData['day'])
