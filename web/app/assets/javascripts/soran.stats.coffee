@@ -22,9 +22,178 @@ Stats.prototype =
     soran.withCircle $stats, this, this.getData, [], (d) ->
       keyFunc = null
       switch k
-        when 'day' then that.drawLinear(soranFn.groupBy(d.content, that.keyDay))
+        when 'day'
+        then that.drawLinear(soranFn.groupBy(d.content, that.keyDay))
+        when 'punchcard'
+        then that.drawPunch(soranFn.groupBy(d.content, that.keyDay))
         else throw "there is no rules #{ k }"
       
+  sortPunch: (grouped, callback) ->
+    day7 = [0..6]
+    hours24 = [0..23]
+    w = 750
+    max = 0
+    punchMargin = 1
+    circle1002R = ((w - 100) / 24.0) - (punchMargin * 2)
+    circle100Radius = circle1002R / 2.0
+
+    mapValueFunc = (v) ->
+      g = (x) ->
+        d = new Date(x.createdAt)
+        d.getHours().toString()
+      a = soranFn.groupBy v, g
+      soranFn.mapValue a, (x) ->
+        x.length
+    d = soranFn.mapValue(grouped, mapValueFunc)
+    soranFn.map m
+    m = (k, v) ->
+      d =
+        day: k
+        hours: v
+      d
+
+    data = soranFn.map d, m
+    a = []
+    currD = data.map (d, i) ->
+      d.day
+    currD = currD.map (d, i) ->
+      parseInt d
+    dif = soranFn.diff day7, currD
+    for x in dif
+      d =
+        day: x
+        hours: {}
+      data.push d
+    data = data.map (d, i) ->
+      currA = Object.keys(d['hours'])
+      currA = currA.map (d, i) ->
+        parseInt d
+      dif = soranFn.diff hours24, currA
+      for x in dif
+        d['hours'][x.toString()] = 0
+      hours = []
+      for k in Object.keys(d['hours'])
+        if max < d['hours'][k]
+          max = d['hours'][k]
+        hd =
+          hour: parseInt(k)
+          len: d['hours'][k]
+        hours.push hd
+      hours.qsort (x) ->
+        x['hour']
+      f =
+        day: d['day']
+        hours: hours
+      f
+
+    data.qsort (x) ->
+      x['day']
+    ratio = circle100Radius / parseFloat(Math.sqrt(max))
+    callback data
+
+  drawPunch: (grouped) ->
+    this.sortPunch grouped, (punchSortedData) ->
+      console.log 'imdrawpunch'
+      dayText = ['일요일', '월요일', '화요일',
+                 '수요일', '목요일', '금요일', '토요일']
+      w = 750
+      h = 600
+      ratio = 1
+      leftMargin = 100
+      punchMargin = 1
+      circle1002R = ((w - 100) / 24.0) - (punchMargin * 2)
+      circle100Radius = circle1002R / 2.0
+      heightMarginRatio = (h / 6) * 0.8
+      drawPunchCircle = (dest, sortedData) ->
+        data = sortedData['hours']
+        punchG = dest.selectAll('g').data(data).enter().append('g')
+        punchG.attr 'class', 'punch'
+        punchG.attr 'transform', (d) ->
+          "translate(#{ leftMargin + parseInt(d['hour']) * circle1002R}, 0)"
+        info = d3.select("#info")
+        circle = punchG.append('circle')
+        circle.attr 'cx', 0
+        circle.attr 'cy', 0
+        circle.attr 'fill', '#494949'
+        circle.attr 'r', (d) ->
+          Math.sqrt(d['len']) * ratio
+        circle.on 'mouseover', (d) ->
+          h = parseInt(d['hour'])
+          d = parseInt(sortedData['day'])
+          info.style 'top', ((d * heightMarginRatio) - 50)
+          info.style 'left', (100 + (circle1002R * h) - 20)
+          info.style 'display', 'block'
+          c = d3.select(this)
+          c.style 'fill', 'steelblue'
+        circle.on 'mouseout', (d) ->
+          info.style 'display', 'none'
+          c = d3.select(this)
+          c.style 'fill', '#494949'
+        line = punchG.append('line')
+        line.attr 'x1', 0
+        line.attr 'x2', 0
+        line.attr 'y1', (d) ->
+          if parseInt(d['hour']) % 2 == 0
+            20
+          else
+            30
+        line.attr 'y2', 40
+        line.attr 'class', 'punch-line'
+          
+      drawAxis =(dest, data) ->
+        axis = dest.append('line')
+        axis.attr 'class', 'punch-axis'
+        axis.attr 'x1', 0
+        axis.attr 'x2', w
+        axis.attr 'y1', 40
+        axis.attr 'y2', 40
+        
+      drawPunchDay = (dest, data) ->
+        marginRatio = heightMarginRatio
+        yMargin = parseInt(data['day']) * marginRatio
+        day = dest.append('g')
+        day.attr 'class', 'day'
+        day.attr 'transform', "translate(0, #{ yMargin })"
+        drawPunchCircle day, data
+        drawAxis day, data['hours']
+        day.append('text')
+            .attr('class', 'day-label')
+            .text(dayText[parseInt(data['day'])])
+        
+      drawChart = (data) ->
+        svg = d3.select('#stats')
+                .append('svg')
+        svg.attr 'width', w
+        svg.attr 'height', h
+        vis = svg.append('g')
+        vis.attr 'transform', 'translate(20, 20)'
+        x = d3.scale.linear().range([100, w - 76])
+        x.domain [0, 23]
+        xAxis = svg.append('g')
+        xAxis.attr 'transform', "translate(20, #{ heightMarginRatio * 7})"
+        f = (d) ->
+          t = d - 12
+          if t == 0
+            "#{ d }p"
+          else if t > 0
+            "#{ t }p"
+          else
+            "#{ d }a"
+
+        axis = d3.svg.axis()
+                 .scale(x)
+                 .orient("bottom")
+                 .tickValues([0..23])
+        xAxis.call(axis)
+        xAxis.attr 'class', 'x axis'
+        xAxis.selectAll('text')
+             .text (d) ->
+               f(parseInt(d))
+
+        for x in data
+          drawPunchDay vis, x
+      drawChart punchSortedData
+
   drawLinear: (grouped) ->
     mapValueFunc = (v) ->
       v.length
