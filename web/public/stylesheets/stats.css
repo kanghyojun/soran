@@ -21,4 +21,14 @@
 #stats .y.axis path {
     stroke-width: 0
 }
+#stats .punch-axis {
+    stroke-width: 1;
+    stroke: #BBB;
+    shape-rendering: crispEdges;
+}
 
+#stats .punch-line {
+    stroke-width: 1;
+    stroke: #BBB;
+    shape-rendering: crispEdges;
+}
