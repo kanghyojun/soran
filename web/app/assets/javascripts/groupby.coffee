@@ -17,7 +17,6 @@ Fn.prototype =
       unless res.hasOwnProperty(k)
         res[k] = []
       res[k].push(i)
-    console.log res
     res
   mapValue: (a, f) ->
     for k, v of a
