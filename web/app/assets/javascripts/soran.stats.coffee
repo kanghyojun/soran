@@ -110,7 +110,7 @@ Stats.prototype =
         punchG.attr 'class', 'punch'
         punchG.attr 'transform', (d) ->
           "translate(#{ leftMargin + parseInt(d['hour']) * circle1002R}, 0)"
-        info = d3.select("#info")
+        info = $(".punch-tooltip")
         circle = punchG.append('circle')
         circle.attr 'cx', 0
         circle.attr 'cy', 0
@@ -119,14 +119,15 @@ Stats.prototype =
           Math.sqrt(d['len']) * that.ratio
         circle.on 'mouseover', (d) ->
           h = parseInt(d['hour'])
-          d = parseInt(sortedData['day'])
-          info.style 'top', ((d * heightMarginRatio) - 50)
-          info.style 'left', (100 + (circle1002R * h) - 20)
-          info.style 'display', 'block'
+          dd = parseInt(sortedData['day'])
+          info.css 'top', ((dd * heightMarginRatio) - 50) + 240
+          info.css 'left', (100 + (circle1002R * h) - 40)
+          info.find('.tooltip-inner').html "#{ d['len'] }회 들음"
+          info.show()
           c = d3.select(this)
           c.style 'fill', 'steelblue'
         circle.on 'mouseout', (d) ->
-          info.style 'display', 'none'
+          info.hide()
           c = d3.select(this)
           c.style 'fill', '#494949'
         line = punchG.append('line')
@@ -306,3 +307,11 @@ if $stats.length isnt 0
   identifier = $stats.data('identifier')
   soranStats.identifier = identifier
   soranStats.draw('day')
+  tabActive = ($elem) ->
+    l = $elem.closest('.nav').find '.active'
+    l.removeClass 'active'
+    $elem.closest('li').addClass 'active'
+  $('.stat-decision li a').on 'click', (e) ->
+    $('#stats svg').remove()
+    tabActive $(this)
+    soranStats.draw($(this).data('kind'))

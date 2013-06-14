@@ -5,11 +5,15 @@
   <h3>@url 님의 음악 생활.</h3>
 
   <ul class="nav nav-tabs stat-decision">
-    <li class="active"><a href="#">요일별</a></li>
-    <li><a href="#">시간별</a></li>
+    <li class="active"><a href="#" data-kind="day">요일별</a></li>
+    <li><a href="#" data-kind="punchcard">시간별</a></li>
   </ul>
   
   <div id="stats" data-identifier="@identifier">
+  <div class="punch-tooltip tooltip fade top in" style="position: absolute;display: none; top: 0; left: 0;">
+    <div class="tooltip-arrow" style=""></div>
+    <div class="tooltip-inner">23</div>
   </div>
+  </div> 
 </div>
 }
