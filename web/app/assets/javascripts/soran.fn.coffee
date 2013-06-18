@@ -31,4 +31,5 @@ Fn.prototype =
     a.filter (i) ->
       not (b.indexOf(i) > -1)
 
-window.soranFn = new Fn()
+soran.extend
+  fn: new Fn()
