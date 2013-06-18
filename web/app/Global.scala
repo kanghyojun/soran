@@ -12,6 +12,6 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
 
    //60 minutes
-   CrawlerActor.system.scheduler.schedule(0 seconds, 30 seconds, CrawlerActor.ref, Crawling())
+   CrawlerActor.system.scheduler.schedule(0 seconds, 60 minutes, CrawlerActor.ref, Crawling())
   }  
 }
